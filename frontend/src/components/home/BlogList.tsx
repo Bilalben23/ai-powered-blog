@@ -1,7 +1,8 @@
-import { blogCategories, type BlogCategory } from '@constants/blogData'
+import { blogCategories, blogData, type BlogCategory } from '@constants/blogData'
 import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom'
+import BlogCard from './BlogCard';
 
 
 export default function BlogList() {
@@ -17,7 +18,7 @@ export default function BlogList() {
 
 
     return (
-        <section className='border'>
+        <section className='mb-24'>
             {/* categories */}
             <div className='relative flex flex-wrap justify-center gap-2 my-10 sm:gap-4' >
                 {
@@ -43,8 +44,19 @@ export default function BlogList() {
             </div>
 
             {/* blog cards */}
-            <div>
-
+            <div className='container grid grid-cols-1 mx-auto gap-x-7 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+                {
+                    blogData
+                        .filter(c => category === "all" ? true : c.category === category)
+                        .map(blog => <BlogCard
+                            key={blog._id}
+                            id={blog._id}
+                            image={blog.image}
+                            category={blog.category}
+                            title={blog.title}
+                            description={blog.description}
+                        />)
+                }
             </div>
 
         </section>
