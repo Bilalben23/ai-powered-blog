@@ -9,7 +9,7 @@ export default function App() {
       <Routes>
         <Route path='/' element={<AppLayout />}>
           <Route index element={<HomePage />} />
-          <Route path='/blog' element={<BlogPage />} />
+          <Route path='/blog/:id' element={<BlogPage />} />
 
         </Route>
       </Routes>

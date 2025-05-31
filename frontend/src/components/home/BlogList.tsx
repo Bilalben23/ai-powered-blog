@@ -18,7 +18,7 @@ export default function BlogList() {
 
 
     return (
-        <section className='mb-24'>
+        <section className='p-2 mb-24'>
             {/* categories */}
             <div className='relative flex flex-wrap justify-center gap-2 my-10 sm:gap-4' >
                 {
