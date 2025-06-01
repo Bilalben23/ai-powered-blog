@@ -1,14 +1,31 @@
 export const footerData = [
     {
         title: "Quick Links",
-        links: ["Home", "Best Sellers", "Offers & Deals", "Contact Us", "FAQs"]
+        links: [
+            { label: "Home", href: "/" },
+            { label: "Best Sellers", href: "#" },
+            { label: "Offers & Deals", href: "#" },
+            { label: "Contact Us", href: "#" },
+            { label: "FAQs", href: "#" },
+        ],
     },
     {
         title: "Need Help?",
-        links: ["Delivery Information", "Return & Refund Policy", "Payment Methods", "Track your Order", "Contact Us"]
+        links: [
+            { label: "Delivery Information", href: "#" },
+            { label: "Return & Refund Policy", href: "#" },
+            { label: "Payment Methods", href: "#" },
+            { label: "Track your Order", href: "#" },
+            { label: "Contact Us", href: "#" },
+        ],
     },
     {
         title: "Follow Us",
-        links: ["Instagram", "Twitter", "Facebook", "YouTube"]
-    }
+        links: [
+            { label: "Instagram", href: "#" },
+            { label: "Twitter", href: "#" },
+            { label: "Facebook", href: "#" },
+            { label: "YouTube", href: "#" },
+        ],
+    },
 ];

@@ -12,7 +12,7 @@ export default function Newsletter() {
     }
 
     return (
-        <div>
+        <div className="px-2">
             <h2 className='mb-2 text-2xl font-medium text-center sm:text-3xl md:text-4xl'>Never Miss a Blog!</h2>
             <p className='text-center text-gray-500/70 md:text-lg'>Subscribe to get the latest blog, new tech, and exclusive news.</p>
 
@@ -28,7 +28,7 @@ export default function Newsletter() {
                 />
                 <button
                     type='submit'
-                    className='px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 text-white rounded-r-md transition-all bg-primary/90 hover:bg-primary uppercase font-light cursor-pointer'
+                    className='px-3 sm:px-6 md:px-8 py-2.5 text-sm md:text-base sm:py-3 text-white rounded-r-md transition-all bg-primary/90 hover:bg-primary uppercase font-light cursor-pointer'
                 >Subscribe</button>
             </form>
 
