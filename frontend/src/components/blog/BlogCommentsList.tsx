@@ -28,7 +28,7 @@ const BlogCommentsList: FC<BlogCommentsListProps> = ({ isLoading, isError, comme
                         ? <div>
                             <p>No comments yet for this blog</p>
                         </div>
-                        : <div className='flex flex-col max-w-3xl gap-y-6'>
+                        : <div className='flex flex-col gap-y-6'>
                             {
                                 comments.map(comment => (
                                     <CommentCard

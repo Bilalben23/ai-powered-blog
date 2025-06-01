@@ -3,13 +3,19 @@ import { assets } from '@constants/assets';
 import { blogData, type Blog } from '@constants/blogData';
 import { commentsData, type Comment } from '@constants/commentsData';
 import { formatDate } from '@utils/formatDate';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom'
+
+
+const INITIAL_COMMENT_DATA = {
+    name: "",
+    comment: ""
+}
 
 export default function BlogPage() {
     const { id } = useParams<{ id?: string }>();
 
-    // TODO: Send the requests to the backend and get the real data.  
+    // TODO: Send the requests by id to the backend and get the real data.  
     const [blog, setBlog] = useState<Blog | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
 
@@ -18,6 +24,25 @@ export default function BlogPage() {
 
     const [isCommentsError, setIsCommentsError] = useState(false);
     const [isCommentsLoading, setIsCommentsLoading] = useState(false);
+
+    const [commentData, setCommentData] = useState(INITIAL_COMMENT_DATA);
+
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setCommentData(prevData => ({
+            ...prevData,
+            [name]: value
+        }))
+    }
+
+
+    const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        // TODO: sending the comment to the backend...
+        console.log("sending the comment...", commentData);
+    }
 
     const fetchBlog = async () => {
         setIsBlogLoading(true);
@@ -105,27 +130,87 @@ export default function BlogPage() {
                                     <img
                                         src={blog.image}
                                         alt={blog.title}
-                                        className='rounded-xl aspect-video'
+                                        className='object-cover rounded-xl aspect-video'
                                     />
-                                </div>
-
-                                <div className='max-w-4xl px-5 mx-auto mt-6'>
-                                    <div className='blog-description' dangerouslySetInnerHTML={{ __html: blog.description }} />
-
-                                    {/* Comments Section */}
-                                    <div className='mt-12'>
-                                        <p className='mb-4 font-semibold'>Comments ({comments.length})</p>
-                                        <BlogCommentsList
-                                            isError={isCommentsError}
-                                            isLoading={isCommentsLoading}
-                                            comments={comments}
-                                        />
-                                    </div>
-
                                 </div>
                             </div>
 
-                        </section>
+
+                            <div className='max-w-4xl px-5 mx-auto mt-6'>
+                                {/* Description section */}
+                                <div className='blog-description' dangerouslySetInnerHTML={{ __html: blog.description }} />
+
+                                {/* Comments Section */}
+                                <div className='max-w-3xl my-12'>
+                                    <p className='mb-4 font-semibold'>Comments ({comments.length})</p>
+                                    <BlogCommentsList
+                                        isError={isCommentsError}
+                                        isLoading={isCommentsLoading}
+                                        comments={comments}
+                                    />
+                                </div>
+
+                                {/* Add comment section */}
+                                <div className='max-w-2xl'>
+                                    <p className='mb-4 font-semibold'>Add your comment</p>
+                                    <form className='flex flex-col items-start gap-y-5' onSubmit={handleSubmit}>
+                                        <input
+                                            type="text"
+                                            name='name'
+                                            placeholder="Your name"
+                                            className="w-full p-3 transition border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                                            onChange={handleChange}
+                                            value={commentData.name}
+                                            required
+                                        />
+                                        <textarea
+                                            name="comment"
+                                            placeholder="Your comment..."
+                                            className="w-full p-3 transition border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 max-h-[400px] focus:ring-primary"
+                                            rows={7}
+                                            onChange={handleChange}
+                                            value={commentData.comment}
+                                            required
+                                        ></textarea>
+                                        <button
+                                            type="submit"
+                                            className='px-8 py-2 text-white transition rounded-md shadow-xs cursor-pointer hover:bg-primary/95 hover:shadow-none bg-primary hover:scale-102'
+                                        >Submit</button>
+                                    </form>
+                                </div>
+
+                                {/* Social Media Share Section */}
+                                <div className='mt-12'>
+                                    <p className='mb-4 font-semibold'>Share this article on social media</p>
+                                    <div className='flex items-center gap-x-4'>
+                                        <a href="#" className='block p-2 transition rounded-full shadow-md hover:shadow-sm'>
+                                            <img
+                                                src={assets.facebook_icon}
+                                                alt="Facebook"
+                                                className='size-7'
+                                            />
+                                        </a>
+                                        <a href="#" className='block p-2 transition rounded-full shadow-md hover:shadow-sm'>
+                                            <img
+                                                src={assets.twitter_icon}
+                                                alt="Twitter"
+                                                className='size-7'
+
+                                            />
+                                        </a>
+
+                                        <a href="#" className='block p-2 transition rounded-full shadow-md hover:shadow-sm'>
+                                            <img
+                                                src={assets.googleplus_icon}
+                                                alt="Google Plus"
+                                                className='size-7'
+                                            />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section >
                     : <div>
                         <p>Error occurred while fetching blog data</p>
                     </div>
