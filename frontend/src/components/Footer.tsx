@@ -6,7 +6,7 @@ export default function Footer() {
     const fullYear = new Date().getFullYear();
 
     return (
-        <footer className='bg-primary/5 px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32 mt-30 text-gray-500'>
+        <footer className='px-6 text-gray-500 bg-primary/5 sm:px-10 md:px-16 lg:px-24 xl:px-32 mt-30'>
             <div className="flex flex-col gap-10 py-10 md:flex-row md:justify-between md:items-start">
                 {/* Logo + Description */}
                 <div className="w-full md:w-1/2">
@@ -15,7 +15,7 @@ export default function Footer() {
                         alt="QuickBlog Logo"
                         className='w-28 sm:w-36 md:w-40'
                     />
-                    <p className="mt-6 max-w-md font-light text-sm leading-relaxed">
+                    <p className="max-w-md mt-6 text-sm font-light leading-relaxed">
                         QuickBlog is your place to write, read, and discover. From tech insights to lifestyle tips, explore what matters to you.
                     </p>
                 </div>
@@ -35,7 +35,7 @@ export default function Footer() {
                                                     href={link.href}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="hover:underline hover:text-primary transition"
+                                                    className="transition hover:underline hover:text-primary"
                                                     aria-label={link.label}
                                                 >
                                                     {link.label}
@@ -43,7 +43,7 @@ export default function Footer() {
                                             ) : (
                                                 <Link
                                                     to={link.href}
-                                                    className="hover:underline hover:text-primary transition"
+                                                    className="transition hover:underline hover:text-primary"
                                                 >
                                                     {link.label}
                                                 </Link>

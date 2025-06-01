@@ -1,16 +1,70 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #5044E5;
-  --color-secondary: #F8F9FD
+  --color-primary: #5044e5;
+  --color-secondary: #f8f9fd;
 }
 
 @layer base {
   html {
-      font-family: "Outfit", sans-serif;
+    font-family: "Outfit", sans-serif;
   }
 
   ::-webkit-scrollbar {
-    display: none;
+    @apply hidden;
+  }
+
+  /* blog decription styles */
+
+  .blog-description {
+    @apply text-base md:text-lg
+  }
+
+  .blog-description p {
+    @apply mb-4 text-[#292929];
+  }
+
+  .blog-description h1 {
+    @apply text-3xl font-semibold text-[#252525] my-7;
+  }
+
+  .blog-description h2 {
+    @apply text-2xl font-semibold text-[#252525] my-6;
+  }
+
+  .blog-description h3 {
+    @apply text-xl font-medium text-[#333333] my-5;
+  }
+
+  .blog-description h4 {
+    @apply text-lg font-medium text-[#444444] my-4;
+  }
+
+  .blog-description h5 {
+    @apply text-base font-normal text-[#555555] my-3;
+  }
+
+  .blog-description h6 {
+    @apply text-sm font-normal text-[#666666] my-2;
+  }
+
+  .blog-description strong {
+    @apply font-bold;
+  }
+
+  .blog-description ol {
+    @apply ml-8 list-decimal
+  }
+
+  .blog-description ul {
+    @apply ml-8 list-disc
+  }
+
+  .blog-description li {
+    @apply mb-2;
+  }
+
+  .blog-description a {
+    @apply text-primary;
   }
 }

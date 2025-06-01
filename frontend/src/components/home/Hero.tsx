@@ -5,7 +5,7 @@ export default function Hero() {
     return (
         <div className='relative mx-6 sm:mx-16 xl:mx-24'>
 
-            <div className='mt-20 mb-4 text-center sm:mb-8'>
+            <div className='mt-10 mb-4 text-center sm:mt-16 md:mt-20 sm:mb-8'>
                 <div className='inline-flex items-center justify-center gap-4 px-6 py-2 mb-4 text-sm border border-gray-300 rounded-full bg-primary/10'>
                     <p>New: AI feature intergrated</p>
                     <img
@@ -38,7 +38,7 @@ export default function Hero() {
             <img
                 src={assets.gradientBackground}
                 alt="Gradient Background"
-                className='absolute opacity-50 -top-50 -z-1'
+                className='absolute opacity-50 -top-40 -z-1'
             />
         </div>
     )
