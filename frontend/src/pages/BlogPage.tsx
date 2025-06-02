@@ -1,4 +1,5 @@
 import BlogCommentsList from '@components/blog/BlogCommentsList';
+import BlogDetailsSkeleton from '@components/skeletons/BlogDetailsSkeleton';
 import { assets } from '@constants/assets';
 import { blogData, type Blog } from '@constants/blogData';
 import { commentsData, type Comment } from '@constants/commentsData';
@@ -104,10 +105,8 @@ export default function BlogPage() {
         <>
             {
                 !isBlogError ?
-                    isBlogLoading ?
-                        <div>
-                            <p>Loading...</p>
-                        </div>
+                    !isBlogLoading
+                        ? <BlogDetailsSkeleton />
                         : blog && <section className='container px-2 mx-auto mt-10 sm:mt-16 md:mt-20'>
 
                             <div className='relative'>
