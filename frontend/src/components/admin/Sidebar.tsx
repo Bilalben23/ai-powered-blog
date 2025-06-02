@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 
 export default function Sidebar() {
     return (
-        <aside className='bg-white border-b-2 border-r-2 border-gray-200'>
+        <aside className='bg-white border-b-2 border-r-2 border-gray-200 min-h-[calc(100vh-85px)]'>
             <nav>
                 <ul>
                     <li>

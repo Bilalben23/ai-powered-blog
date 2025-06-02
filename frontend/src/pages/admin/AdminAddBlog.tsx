@@ -2,6 +2,8 @@ import React from 'react'
 
 export default function AdminAddBlog() {
     return (
-        <div>Admin add blog</div>
+        <section className='p-6'>
+            Admin add blog
+        </section>
     )
 }

@@ -6,8 +6,8 @@ import { Outlet } from 'react-router-dom'
 export default function AdminLayout() {
     return (
         <>
-            <Header classes='border-b-2 border-gray-200' />
-            <main className='bg-[#F6FAFE] h-[800px] flex gap-x-5'>
+            <Header classes='border-b-2 border-gray-200 md:!px-6' />
+            <main className='bg-[#F6FAFE] flex'>
                 <Sidebar />
                 <Outlet />
             </main>
