@@ -2,11 +2,11 @@ import { assets } from "@constants/assets";
 import { footerData } from "@constants/footerData";
 import { Link } from "react-router-dom";
 
-export default function Footer() {
+export default function Footer({ classes = "bg-primary/5" }: { classes?: string }) {
     const fullYear = new Date().getFullYear();
 
     return (
-        <footer className='px-6 text-gray-500 bg-primary/5 sm:px-10 md:px-16 lg:px-24 xl:px-32 mt-30'>
+        <footer className={`px-6 text-gray-500 sm:px-10 md:px-16 lg:px-24 xl:px-32 mt-30 ${classes}`}>
             <div className="flex flex-col gap-10 py-10 md:flex-row md:justify-between md:items-start">
                 {/* Logo + Description */}
                 <div className="w-full md:w-1/2">

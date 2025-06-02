@@ -1,11 +1,11 @@
 import { assets } from '@constants/assets'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-export default function Header() {
+export default function Header({ classes = "" }: { classes?: string }) {
     const navigate = useNavigate();
 
     return (
-        <header className='flex items-center justify-between py-5 mx-6 sm:mx-16 xl:mx-28'>
+        <header className={`flex items-center justify-between py-5 px-6 sm:px-16 xl:px-28 ${classes}`}>
             <button
                 type='button'
                 className='transition-opacity cursor-pointer hover:opacity-95'
