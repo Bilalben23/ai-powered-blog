@@ -1,4 +1,4 @@
-import React from 'react';
+import CommentCardSkeleton from "./CommentCardSkeleton";
 
 export default function BlogDetailsSkeleton() {
     return (
@@ -33,16 +33,9 @@ export default function BlogDetailsSkeleton() {
                 <p className="w-32 h-6 mb-4 bg-gray-300 rounded-full animate-pulse"></p>
 
                 {/* Comments list skeleton */}
-                <div className="space-y-6">
+                <div className="flex flex-col gap-y-6">
                     {[1, 2, 3].map((i) => (
-                        <div key={i} className="flex items-start gap-4">
-                            <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
-                            <div className="flex-1 space-y-2">
-                                <div className="w-1/4 h-4 bg-gray-300 rounded-full animate-pulse"></div>
-                                <div className="w-full h-4 bg-gray-300 rounded-full animate-pulse"></div>
-                                <div className="w-5/6 h-4 bg-gray-300 rounded-full animate-pulse"></div>
-                            </div>
-                        </div>
+                        <CommentCardSkeleton key={i} />
                     ))}
                 </div>
             </div>

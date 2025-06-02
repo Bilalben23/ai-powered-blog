@@ -105,7 +105,7 @@ export default function BlogPage() {
         <>
             {
                 !isBlogError ?
-                    !isBlogLoading
+                    isBlogLoading
                         ? <BlogDetailsSkeleton />
                         : blog && <section className='container px-2 mx-auto mt-10 sm:mt-16 md:mt-20'>
 
