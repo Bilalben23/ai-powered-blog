@@ -7,7 +7,7 @@ export default function Hero() {
 
             <div className='mt-10 mb-4 text-center sm:mt-16 md:mt-20 sm:mb-8'>
                 <div className='inline-flex items-center justify-center gap-4 px-6 py-2 mb-4 text-sm border border-gray-300 rounded-full bg-primary/10'>
-                    <p>New: AI feature intergrated</p>
+                    <p>New: AI feature integrated</p>
                     <img
                         src={assets.star_icon}
                         alt="Star Icon"

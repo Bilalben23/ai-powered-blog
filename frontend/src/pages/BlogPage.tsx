@@ -101,6 +101,10 @@ export default function BlogPage() {
         fetchComments();
     }, [])
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
+
 
     if (isBlogError) {
         return (
@@ -115,6 +119,7 @@ export default function BlogPage() {
     if (isBlogLoading) {
         return <BlogDetailsSkeleton />
     }
+
 
     return (
         <>
