@@ -8,6 +8,7 @@ import AdminDashboard from '@pages/admin/AdminDashboard';
 import AdminAddBlog from '@pages/admin/AdminAddBlog';
 import AdminBlogList from '@pages/admin/AdminBlogList';
 import AdminComments from '@pages/admin/AdminComments';
+import ProtectedRoute from '@components/ProtectedRoute';
 
 
 export default function App() {
@@ -20,12 +21,14 @@ export default function App() {
 
         </Route>
 
-        <Route path='/admin' element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path='blogs/new' element={<AdminAddBlog />} />
-          <Route path='blogs' element={<AdminBlogList />} />
-          <Route path='comments' element={<AdminComments />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path='/admin' element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path='blogs/new' element={<AdminAddBlog />} />
+            <Route path='blogs' element={<AdminBlogList />} />
+            <Route path='comments' element={<AdminComments />} />
 
+          </Route>
         </Route>
 
         <Route path='/login' element={<Login />} />

@@ -12,7 +12,9 @@
       "@assets/*": ["assets/*"],
       "@layouts/*": ["layouts/*"],
       "@constants/*": ["constants/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@context/*": ["context/*"],
+      "@hooks/*": ["hooks/*"]
     }
   }
 }

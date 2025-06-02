@@ -1,4 +1,6 @@
+import { useAuth } from '@hooks/useAuth';
 import { useState, type ChangeEvent } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const INITIAL_STATE = {
     email: "",
@@ -8,6 +10,9 @@ const INITIAL_STATE = {
 
 export default function Login() {
     const [credentials, setCredentials] = useState(INITIAL_STATE);
+    const navigate = useNavigate();
+    const { login } = useAuth();
+
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -17,8 +22,10 @@ export default function Login() {
     const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // TODO: send the credentials to backend
+        // TODO: Send the credentials to the backend...
         console.log("Sending the credentials...", credentials);
+        login({ user: { email: credentials.email }, accessToken: "sdfghjklklñdfghjklñ" })
+        navigate("/admin", { replace: true });
     }
 
 
@@ -52,7 +59,7 @@ export default function Login() {
                             placeholder='Your password'
                             className='py-3 transition-all border-b-2 border-gray-300 outline-none focus:border-primary/90 focus:caret-primary/90'
                             onChange={handleChange}
-                            value={credentials.email}
+                            value={credentials.password}
                             required
                         />
                     </div>

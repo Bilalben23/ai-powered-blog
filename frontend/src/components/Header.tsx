@@ -1,17 +1,20 @@
 import { assets } from '@constants/assets'
 import { useNavigate } from 'react-router-dom'
 import { LogOut } from "lucide-react";
-import { useState } from 'react';
+import { useAuth } from '@hooks/useAuth';
 
 export default function Header({ classes = "" }: { classes?: string }) {
     const navigate = useNavigate();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const { isAuthenticated, logout } = useAuth();
 
     const handleLogout = () => {
         const confirmLogout = confirm("Are you sure you want to logout?");
         if (confirmLogout) {
-            setIsAuthenticated(false);
-            navigate("/")
+            logout();
+
+            setTimeout(() => {
+                navigate("/", { replace: true });
+            }, 0)
         }
     }
 

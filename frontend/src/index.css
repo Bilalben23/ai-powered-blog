@@ -17,7 +17,7 @@
   /* blog decription styles */
 
   .blog-description {
-    @apply text-base md:text-lg
+    @apply text-base md:text-lg;
   }
 
   .blog-description p {
@@ -53,11 +53,11 @@
   }
 
   .blog-description ol {
-    @apply ml-8 list-decimal
+    @apply ml-8 list-decimal;
   }
 
   .blog-description ul {
-    @apply ml-8 list-disc
+    @apply ml-8 list-disc;
   }
 
   .blog-description li {

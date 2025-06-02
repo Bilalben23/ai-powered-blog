@@ -1,5 +1,5 @@
-import { assets } from '@constants/assets'
-import { NavLink } from 'react-router-dom'
+import { assets } from '@constants/assets';
+import { NavLink } from 'react-router-dom';
 
 export default function Sidebar() {
     return (
