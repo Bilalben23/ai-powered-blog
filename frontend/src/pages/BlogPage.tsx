@@ -4,7 +4,7 @@ import BlogDetailsSkeleton from '@components/skeletons/BlogDetailsSkeleton';
 import { assets } from '@constants/assets';
 import { blogData, type Blog } from '@constants/blogData';
 import { commentsData, type Comment } from '@constants/commentsData';
-import { formatDate } from '@utils/formatDate';
+import { formatDateStandard } from '@utils/formatDate';
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom'
 
@@ -134,7 +134,7 @@ export default function BlogPage() {
                         />
 
                         <div className='mb-8 text-center'>
-                            <p className='text-primary'>Published on {formatDate(blog.createdAt)}</p>
+                            <p className='text-primary'>Published on {formatDateStandard(blog.createdAt)}</p>
                             <h1 className='max-w-2xl mx-auto my-4 text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl'>{blog.title}</h1>
                             <p className='mb-4 font-light text-gray-500'>{blog.subTitle}</p>
                             <div className='inline-flex items-center justify-center gap-4 px-6 py-1.5 mb-2 sm:mb-4 text-sm border rounded-full border-primary bg-primary/5'>

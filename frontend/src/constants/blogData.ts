@@ -7,12 +7,12 @@ export interface Blog {
     title: string;
     subTitle: string;
     description: string;
-    category: BlogCategory
+    category: BlogCategory;
     image: string;
+    isPublished: boolean;
     createdAt: string;
     updatedAt: string;
     __v: number
-    isPublished: boolean
 }
 
 export const blogCategories: BlogCategory[] = ['all', 'technology', 'startup', 'lifestyle', 'finance'];

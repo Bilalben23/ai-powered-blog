@@ -10,10 +10,6 @@
     font-family: "Outfit", sans-serif;
   }
 
-  ::-webkit-scrollbar {
-    @apply hidden;
-  }
-
   /* blog decription styles */
 
   .blog-description {

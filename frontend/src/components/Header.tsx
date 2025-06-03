@@ -19,7 +19,7 @@ export default function Header({ classes = "" }: { classes?: string }) {
     }
 
     return (
-        <header className={`flex items-center justify-between py-3 md:py-5 px-4 sm:px-16 xl:px-28 ${classes}`}>
+        <header className={`flex w-full items-center justify-between py-3 md:py-5 px-4 sm:px-16 xl:px-28 ${classes}`}>
             <button
                 type='button'
                 className='transition-opacity cursor-pointer hover:opacity-95'
