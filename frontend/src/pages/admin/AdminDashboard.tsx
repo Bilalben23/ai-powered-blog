@@ -13,6 +13,8 @@ export default function AdminDashboard() {
         "recentBlogs": blogData.slice(0, 5)
     })
 
+    const recentBlogs = blogData.slice(1, 7);
+
     const handleToggleBlogPublish = (id: string) => {
         // TODO: Implement a PATCH request to the backend to toggle publish status
         console.log(`🔄 Toggling publish status for blog with ID: ${id}`);
@@ -22,10 +24,6 @@ export default function AdminDashboard() {
         // TODO: Implement a DELETE request to the backend to delete the blog post
         console.log(`🗑️ Sending delete request for blog with ID: ${id}`);
     }
-
-    const recentBlogs = blogData.slice(1, 7);
-
-
 
     return (
         <section className='flex-1 w-full p-3 sm:p-6 md:p-10'>
@@ -70,7 +68,7 @@ export default function AdminDashboard() {
                     <img
                         src={assets.dashboard_icon_4}
                         alt=""
-                        className='size-6' />
+                        className='size-5' />
                     Latest Blogs
                 </h2>
 
