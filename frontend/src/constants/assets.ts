@@ -20,9 +20,7 @@ import list_icon from '@assets/list_icon.svg';
 import email_icon from '@assets/email_icon.png';
 import upload_area from '@assets/upload_area.svg';
 import user_icon from '@assets/user_icon.svg';
-import bin_icon from '@assets/bin_icon.svg';
 import comment_icon from '@assets/comment_icon.svg';
-import tick_icon from '@assets/tick_icon.svg';
 import star_icon from '@assets/star_icon.svg'
 import cross_icon from '@assets/cross_icon.svg';
 import home_icon from '@assets/home_icon.svg';
@@ -55,9 +53,7 @@ export const assets = {
     email_icon,
     upload_area,
     user_icon,
-    bin_icon,
     comment_icon,
-    tick_icon,
     star_icon,
     home_icon,
     gradientBackground,
