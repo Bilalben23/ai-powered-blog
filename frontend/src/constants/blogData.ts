@@ -1,6 +1,6 @@
 import { assets } from "./assets"
 
-export type BlogCategory = 'all' | 'technology' | 'startup' | 'lifestyle' | 'finance';
+export type BlogCategory = 'startup' | 'technology' | 'lifestyle' | 'finance';
 
 export interface Blog {
     _id: string;
@@ -15,7 +15,7 @@ export interface Blog {
     __v: number
 }
 
-export const blogCategories: BlogCategory[] = ['all', 'technology', 'startup', 'lifestyle', 'finance'];
+export const blogCategories: BlogCategory[] = ['technology', 'startup', 'lifestyle', 'finance'];
 
 export const blogData: Blog[] = [
     {

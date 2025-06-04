@@ -108,7 +108,7 @@ export default function AdminComments() {
                                                             transition={{ duration: 0.3, ease: "easeInOut" }}
                                                             style={{ display: "inline-block" }}
                                                         >
-                                                            <CheckCircle size={24} />
+                                                            <CheckCircle size={24} className='text-green-600' />
                                                         </motion.div>
                                                     </motion.button>
                                                     : <p className='px-3 py-1 text-xs text-green-600 bg-green-100 border border-green-600 rounded-full'>Approved</p>

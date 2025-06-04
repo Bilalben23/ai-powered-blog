@@ -1,15 +1,17 @@
-import { blogCategories, blogData, type BlogCategory } from '@constants/blogData'
+import { blogCategories, blogData, type BlogCategory } from '@constants/blogData';
 import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom';
 import BlogCard from './BlogCard';
+
+type BlogCategoryFilter = 'all' | BlogCategory;
 
 
 export default function BlogList() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const initialCategory = (searchParams.get("category") as BlogCategory) || "all";
+    const initialCategory = (searchParams.get("category") as BlogCategoryFilter) || "all";
 
-    const [category, setCategory] = useState<BlogCategory>(initialCategory);
+    const [category, setCategory] = useState<BlogCategoryFilter>(initialCategory);
 
 
     useEffect(() => {
@@ -22,7 +24,7 @@ export default function BlogList() {
             {/* categories */}
             <div className='relative flex flex-wrap justify-center gap-2 my-10 sm:gap-4' >
                 {
-                    blogCategories.map((cat, index) => (
+                    (["all", ...blogCategories] as BlogCategory[]).map((cat, index) => (
                         <button
                             key={index}
                             type='button'
