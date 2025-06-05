@@ -5,7 +5,7 @@ import { assets } from '@constants/assets';
 import { blogData, type Blog } from '@constants/blogData';
 import { commentsData, type Comment } from '@constants/commentsData';
 import { formatDateStandard } from '@utils/formatDate';
-import { useEffect, useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import { useParams } from 'react-router-dom'
 
 
@@ -39,7 +39,7 @@ export default function BlogPage() {
     }
 
 
-    const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // TODO: sending the comment to the backend...

@@ -1,115 +1,171 @@
 import { assets } from '@constants/assets';
-import { blogCategories, type BlogCategory } from '@constants/blogData';
-import { useState, type ChangeEvent } from 'react';
+import { blogCategories } from '@constants/blogData';
+import { useEffect, useRef } from 'react';
 import { motion } from "motion/react";
 import { Pencil } from 'lucide-react';
+import Quill from 'quill';
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 
-type blogDataType = {
-    thumbnail: File | null;
-    title: string;
-    subtitle: string;
-    description: string;
-    category: Exclude<BlogCategory, "all">;
-    isPublished: boolean
-}
+const blogFormSchema = z.object({
+    thumbnail: z.instanceof(File, {
+        message: "Thumbnail is required"
+    }),
+    title: z.string()
+        .trim()
+        .min(3, "Title must be at least 3 characters"),
+    subtitle: z.string()
+        .trim()
+        .min(3, "Subtitle must be at least 3 characters"),
+    category: z.enum(blogCategories as [string, ...string[]], {
+        message: `Category must be one of these: ${blogCategories.join(" | ")}`
+    }),
+    isPublished: z.boolean(),
+    description: z.string()
+        .trim()
+        .min(10, 'Description must be at least 10 characters')
+})
+
+
+type BlogFormData = z.infer<typeof blogFormSchema>;
+
 
 export default function AdminAddBlog() {
-
-    const [blogData, setBlogData] = useState<blogDataType>({
-        thumbnail: null,
-        title: "",
-        subtitle: "",
-        description: "",
-        category: "startup",
-        isPublished: false
+    const {
+        handleSubmit,
+        watch,
+        setValue,
+        register,
+        getValues,
+        formState: { errors }
+    } = useForm<BlogFormData>({
+        resolver: zodResolver(blogFormSchema),
+        defaultValues: {
+            thumbnail: undefined,
+            title: "",
+            subtitle: "",
+            category: "startup",
+            isPublished: false,
+            description: ""
+        }
     });
 
+    const editorRef = useRef<HTMLDivElement | null>(null);
+    const quillRef = useRef<Quill | null>(null);
+    const thumbnail = watch('thumbnail');
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const { name, value, type } = e.target;
 
-        setBlogData(prevData => ({
-            ...prevData,
-            [name]: type === "checkbox"
-                ? (e.target as HTMLInputElement).checked
-                : type === "file"
-                    ? (e.target as HTMLInputElement).files?.[0] || null
-                    : value
-        }))
+    const onSubmit = () => {
+        console.log("Submit log:", getValues());
+
+        // TODO: Call your post API here
     }
-
-    const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        // TODO: send POST request to the backend to create a new blog.
-        console.log("Send blog data...", blogData);
-    }
-
 
     const generateContentWithAI = () => {
-
+        // Future: Use AI API and inject into Quill
     }
+
+
+    useEffect(() => {
+        if (editorRef.current && !quillRef.current) {
+            quillRef.current = new Quill(editorRef.current, {
+                theme: "snow",
+                placeholder: "Write something awesome..."
+            });
+        }
+
+        quillRef.current?.on("text-change", () => {
+            const html = quillRef.current?.root.innerHTML || "";
+            setValue("description", html, { shouldValidate: true })
+        })
+
+    }, [setValue])
+
+
+    // Cleanup object URL to avoid memory leak
+    useEffect(() => {
+        if (!(thumbnail instanceof File)) return;
+        const objectUrl = URL.createObjectURL(thumbnail);
+        return () => {
+            URL.revokeObjectURL(objectUrl);
+        }
+    }, [thumbnail]);
+
 
 
     return (
         <section className='flex-1 w-full p-3 sm:p-6 md:p-10'>
 
             <form className='flex flex-col w-full max-w-3xl p-4 text-gray-700 bg-white rounded shadow gap-y-6 md:p-10'
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
             >
                 <div>
                     <p className='mb-2'>Upload thumbnail</p>
                     <label htmlFor="thumbnail" className='block cursor-pointer w-fit'>
                         <img
-                            src={!blogData.thumbnail ? assets.upload_area : URL.createObjectURL(blogData.thumbnail)}
-                            alt={!blogData.thumbnail ? "Upload Area" : "Uploaded Image"}
-                            className='h-16 border border-gray-300 rounded'
+                            src={
+                                thumbnail instanceof File
+                                    ? URL.createObjectURL(thumbnail)
+                                    : assets.upload_area
+                            }
+                            alt={thumbnail instanceof File ? "Uploaded Image" : "Upload Area"}
+                            className={`h-16 border border-dashed  rounded-md ${errors.thumbnail ? "border-red-500" : "border-gray-300"}`}
                         />
                     </label>
                     <input
                         type="file"
                         id="thumbnail"
-                        name='thumbnail'
+
+                        {...register("thumbnail", {
+                            onChange: (e) => {
+                                setValue("thumbnail", e.target.files?.[0], {
+                                    shouldValidate: true
+                                })
+                            }
+                        })}
                         className='hidden'
-                        onChange={handleChange}
-                        required
                     />
+                    {errors.thumbnail && (
+                        <p className='text-sm font-light text-red-500'>{errors.thumbnail.message}</p>
+                    )}
                 </div>
 
                 <div className='flex flex-col gap-y-2'>
                     <label htmlFor="title">Blog title</label>
                     <input
                         type="text"
-                        name='title'
                         id='title'
                         placeholder='Type here...'
-                        className='w-full max-w-xl p-2.5 border-2 border-gray-300 rounded outline-none'
-                        onChange={handleChange}
-                        value={blogData.title}
-                        required
+                        className={`w-full max-w-xl p-2.5 border-2 rounded outline-none ${errors.title ? "border-red-500" : "border-gray-300"}`}
+                        {...register("title")}
                     />
+                    {errors.title && (
+                        <p className="text-sm font-light text-red-500">{errors.title.message}</p>
+                    )}
                 </div>
 
                 <div className='flex flex-col gap-y-2'>
                     <label htmlFor="subtitle">Sub title</label>
                     <input
                         type="text"
-                        name='subtitle'
                         id='subtitle'
                         placeholder='Type here...'
-                        className='w-full max-w-xl p-2.5 border-2 border-gray-300 rounded outline-none'
-                        onChange={handleChange}
-                        value={blogData.subtitle}
-                        required
+                        className={`w-full max-w-xl p-2.5 border-2 rounded outline-none ${errors.subtitle ? "border-red-500" : "border-gray-300"}`}
+                        {...register("subtitle")}
                     />
+                    {errors.subtitle && (
+                        <p className="text-sm font-light text-red-500">{errors.subtitle.message}</p>
+                    )}
                 </div>
 
                 <div className='max-w-xl'>
                     <p>Blog Description</p>
 
-
                     <div className='relative pt-2 pb-16 h-72 sm:pb-10'>
+
+                        <div ref={editorRef}></div>
 
                         <button
                             type="button"
@@ -117,7 +173,9 @@ export default function AdminAddBlog() {
                             onClick={generateContentWithAI}
                         ><Pencil size={15} /> Generate with AI</button>
                     </div>
-
+                    {errors.description && (
+                        <p className="text-sm font-light text-red-500">{errors.description.message}</p>
+                    )}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
@@ -125,11 +183,9 @@ export default function AdminAddBlog() {
                         Blog Category
                     </label>
                     <select
-                        name="category"
                         id="category"
-                        className="w-44 px-4 py-2.5 border-2 border-gray-300 rounded shadow-sm focus:outline-none focus:border-gray-400 transition"
-                        onChange={handleChange}
-                        value={blogData.category}
+                        className={`w-44 px-4 py-2.5 border-2 rounded shadow-sm focus:outline-none focus:border-gray-400 transition ${errors.category ? "border-red-500" : "border-gray-300"}`}
+                        {...register("category")}
                     >
                         {blogCategories.map((category, index) => (
                             <option key={index} value={category} className='capitalize'>
@@ -137,6 +193,9 @@ export default function AdminAddBlog() {
                             </option>
                         ))}
                     </select>
+                    {errors.category && (
+                        <p className="text-sm font-light text-red-500">{errors.category.message}</p>
+                    )}
                 </div>
 
 
@@ -147,11 +206,9 @@ export default function AdminAddBlog() {
                     <label className="relative flex items-center cursor-pointer" htmlFor="publish_now">
                         <input
                             type="checkbox"
-                            className="transition-all border rounded shadow appearance-none cursor-pointer size-4.5 peer hover:shadow-md border-slate-300 checked:bg-primary checked:border-primary"
                             id="publish_now"
-                            name='isPublished'
-                            onChange={handleChange}
-                            checked={blogData.isPublished}
+                            className="transition-all border rounded shadow appearance-none cursor-pointer size-4.5 peer hover:shadow-md border-slate-300 checked:bg-primary checked:border-primary"
+                            {...register("isPublished")}
                         />
                         <span className="absolute text-white transform -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100 top-1/2 left-1/2">
                             <svg xmlns="http://www.w3.org/2000/svg" className="size-3.5" viewBox="0 0 20 20" fill="currentColor"

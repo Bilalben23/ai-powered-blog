@@ -1,5 +1,5 @@
 import { useAuth } from '@hooks/useAuth';
-import { useState, type ChangeEvent } from 'react'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const INITIAL_STATE = {
@@ -19,7 +19,7 @@ export default function Login() {
         setCredentials(prevState => ({ ...prevState, [name]: value }))
     }
 
-    const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // TODO: Send the credentials to the backend...

@@ -1,10 +1,10 @@
-import { useState, type ChangeEvent } from "react"
+import { useState, type FormEvent } from "react"
 
 export default function Newsletter() {
     const [email, setEmail] = useState("");
 
 
-    const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // TODO: subscribe the email. send the email to the backend
