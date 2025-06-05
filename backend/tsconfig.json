@@ -2,7 +2,9 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"module": "ESNext",
-		"baseUrl": "./src",
+		"baseUrl": "src",
+		"noEmit": true,
+		"allowImportingTsExtensions": true,
 		"paths": {
 			"@/*": ["*"]
 		},
