@@ -51,6 +51,7 @@ export const register = async (req: Request<{}, {}, RegisterInput>, res: Respons
 
     } catch (err) {
         res.status(500).json({
+            success: false,
             message: "Internal server error",
             error: err instanceof Error ? err.message : "Something went wrong"
         })
@@ -95,6 +96,7 @@ export const login = async (req: Request<{}, {}, LoginInput>, res: Response) => 
 
     } catch (err) {
         res.status(500).json({
+            success: false,
             message: "Internal server error",
             error: err instanceof Error ? err.message : "Something went wrong"
         })
@@ -149,7 +151,8 @@ export const refreshToken = (req: Request, res: Response) => {
     catch (err) {
         res.status(500).json({
             success: false,
-            message: "Internal Server Error"
+            message: "Internal server error",
+            error: err instanceof Error ? err.message : "Something went wrong"
         })
     }
 }

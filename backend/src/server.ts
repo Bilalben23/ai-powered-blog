@@ -6,6 +6,7 @@ import { configurePassport } from "./configs/passport.ts";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import authRouter from "./routes/authRoutes.ts";
+import blogsRouter from "./routes/blogRoutes.ts";
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(passport.initialize());
 
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/blogs", blogsRouter);
 
 
 app.listen(ENV_VARS.PORT, () => {

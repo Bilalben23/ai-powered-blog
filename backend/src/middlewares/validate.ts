@@ -8,6 +8,14 @@ type ValidateOptions = {
     params?: AnyZodObject
 }
 
+/**
+ * Middleware to validate request body, query, and params using Zod schemas.
+ * 
+ * @param schema - An abject containing optional Zod schemas for body, query, and params.
+ * @returns Express middleware function
+ * 
+ * If validation fails, it responds with a 400 status and validation errors.
+ */
 export const validate = (schema: ValidateOptions) =>
     (req: Request, res: Response, next: NextFunction) => {
         try {
