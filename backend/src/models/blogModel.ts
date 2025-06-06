@@ -1,7 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 
 export type BlogCategory = 'startup' | 'technology' | 'lifestyle' | 'finance';
-const blogCategories: BlogCategory[] = ['technology', 'startup', 'lifestyle', 'finance'];
+export const blogCategories: BlogCategory[] = ['startup', 'technology', 'lifestyle', 'finance'];
 
 export interface IBlog extends Document {
     author: Types.ObjectId;

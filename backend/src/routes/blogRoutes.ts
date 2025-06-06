@@ -1,6 +1,8 @@
 import { Router } from "express";
 import * as BlogController from "@/controllers/blogController";
 import { authenticateJWT } from "@/middlewares/authenticateJWT";
+import { validate } from "@/middlewares/validate";
+import { createBlogSchema, updateBlogSchema } from "@/validations/blogSchema";
 
 const router = Router();
 
@@ -52,6 +54,7 @@ router.get(
 router.post(
     "/",
     authenticateJWT,
+    validate({ body: createBlogSchema }),
     BlogController.createBlog
 );
 
@@ -65,6 +68,7 @@ router.post(
 router.patch(
     "/:id",
     authenticateJWT,
+    validate({ body: updateBlogSchema }),
     BlogController.updateBlog
 );
 

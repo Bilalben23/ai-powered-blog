@@ -1,4 +1,5 @@
 import { Blog, BlogCategory } from "@/models/blogModel";
+import { CreateBlogInput, UpdateBlogInput } from "@/validations/blogSchema";
 import { Request, Response } from "express-serve-static-core";
 
 
@@ -112,7 +113,7 @@ export const getBlogById = async (req: Request<{ id: string }>, res: Response) =
 }
 
 
-export const createBlog = async (req: Request, res: Response) => {
+export const createBlog = async (req: Request<{}, {}, CreateBlogInput>, res: Response) => {
     try {
         const authorId = (req.user as { _id: string });
 
@@ -137,7 +138,7 @@ export const createBlog = async (req: Request, res: Response) => {
 }
 
 
-export const updateBlog = async (req: Request<{ id: string }>, res: Response) => {
+export const updateBlog = async (req: Request<{ id: string }, {}, UpdateBlogInput>, res: Response) => {
     try {
         const blogId = req.params.id;
         const authorId = (req.user as { _id: string })._id.toString();
