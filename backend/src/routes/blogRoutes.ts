@@ -3,7 +3,7 @@ import * as BlogController from "@/controllers/blogController.ts";
 import { authenticateJWT } from "@/middlewares/authenticateJWT.ts";
 import { validate } from "@/middlewares/validate.ts";
 import { createBlogSchema, updateBlogSchema } from "@/validations/blogSchema.ts";
-import { upload } from "@/middlewares/multer";
+import { upload } from "@/middlewares/multer.ts";
 
 const router = Router();
 
@@ -19,6 +19,18 @@ router.get(
     authenticateJWT,
     BlogController.getBlogsForAuthor
 );
+
+
+/**
+ * @route GET /api/v1/blogs/dashboard
+ * @desc Get dashboard statistics (total blogs, total comments, latest 6 blogs)
+ * @access Private 
+ */
+router.get(
+    "/dashboard",
+    authenticateJWT,
+    BlogController.getDashboardStats
+)
 
 
 /**

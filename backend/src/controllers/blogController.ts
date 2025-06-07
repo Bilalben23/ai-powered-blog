@@ -1,7 +1,8 @@
+import { Request, Response } from "express-serve-static-core";
 import { Blog, BlogCategory } from "@/models/blogModel.ts";
 import { type CreateBlogInput, type UpdateBlogInput } from "@/validations/blogSchema.ts";
-import { Request, Response } from "express-serve-static-core";
 import { uploadImageAndGetOptimizedUrl } from "@/utils/uploadToImageKit.ts";
+import { Comment } from "@/models/commentModel.ts";
 
 
 export const getBlogsForAuthor = async (req: Request<{}, {}, {}, { limit?: number, page?: number }>, res: Response) => {
@@ -32,6 +33,57 @@ export const getBlogsForAuthor = async (req: Request<{}, {}, {}, { limit?: numbe
                 pageSize: limit,
                 hasNextPage: page < totalPages,
                 hasPrevPage: page > 1
+            }
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: err instanceof Error ? err.message : "Something went wrong"
+        })
+    }
+}
+
+
+export const getDashboardStats = async (req: Request, res: Response) => {
+    try {
+        const authorId = (req.user as { _id: string })._id.toString();
+
+        // Fetch author blog IDs and blog-related counts in parallel
+        const [authorBlogIds, totalBlogs, totalDrafts] = await Promise.all([
+            Blog.find({ author: authorId }).distinct("_id"),
+            Blog.countDocuments({ author: authorId }),
+            Blog.countDocuments({ author: authorId, isPublished: false })
+        ]);
+
+        const [totalComments, latestBlogs] = await Promise.all([
+            Comment.countDocuments({ blog: { $in: authorBlogIds } }),
+            Blog.find({ author: authorId })
+                .sort({ createdAt: -1 })
+                .limit(6)
+                .select("title createdAt isPublished")
+                .lean()
+        ]);
+
+        res.status(200).json({
+            success: true,
+            message: "Dashboard statistics fetched successfully",
+            data: {
+                totalBlogs,
+                totalComments,
+                totalDrafts,
+                latestBlogs
+            }
+        })
+
+        res.status(200).json({
+            success: true,
+            message: "Dashboard statistics fetched successfully",
+            data: {
+                totalBlogs,
+                totalComments,
+                latestBlogs
             }
         })
 
