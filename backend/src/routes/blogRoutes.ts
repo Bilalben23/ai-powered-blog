@@ -60,6 +60,18 @@ router.post(
     BlogController.createBlog
 );
 
+/**
+ * @route PATCH /api/v1/blogs/:id/published
+ * @desc Toggle the `isPublished` status of a blog post (publish/unpublish)
+ * @access Private (only the author can toggle)
+ * @params { id: string } - ID of the blog post to toggle
+ */
+router.patch(
+    "/:id/publish",
+    authenticateJWT,
+    BlogController.togglePublish
+);
+
 
 /**
  * @route PUT /api/v1/blogs/:id

@@ -161,12 +161,52 @@ export const createBlog = async (req: Request<{}, {}, CreateBlogInput>, res: Res
 }
 
 
-export const updateBlog = async (req: Request<{ id: string }, {}, UpdateBlogInput>, res: Response) => {
+export const togglePublish = async (req: Request<{ id: string }, {}, UpdateBlogInput>, res: Response) => {
     try {
-        const blogId = req.params.id;
         const authorId = (req.user as { _id: string })._id.toString();
 
-        const blog = await Blog.findById(blogId);
+        const blog = await Blog.findById(req.params.id);
+
+        if (!blog) {
+            res.status(404).json({
+                success: false,
+                message: "Blog not found"
+            })
+            return;
+        }
+
+        if (blog.author.toString() !== authorId) {
+            res.status(403).json({
+                success: false,
+                message: "You are not authorized to update this blog"
+            })
+            return;
+        }
+
+        blog.isPublished = !blog.isPublished;
+        await blog.save();
+
+        res.status(200).json({
+            success: true,
+            message: `Blog ${blog.isPublished ? "published" : "unpublished"} successfully`,
+            data: blog,
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: err instanceof Error ? err.message : "Something went wrong"
+        })
+    }
+}
+
+
+export const updateBlog = async (req: Request<{ id: string }, {}, UpdateBlogInput>, res: Response) => {
+    try {
+        const authorId = (req.user as { _id: string })._id.toString();
+
+        const blog = await Blog.findById(req.params.id);
 
         if (!blog) {
             res.status(404).json({
