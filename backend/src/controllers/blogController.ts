@@ -1,6 +1,7 @@
-import { Blog, BlogCategory } from "@/models/blogModel";
-import { CreateBlogInput, UpdateBlogInput } from "@/validations/blogSchema";
+import { Blog, BlogCategory } from "@/models/blogModel.ts";
+import { CreateBlogInput, UpdateBlogInput } from "@/validations/blogSchema.ts";
 import { Request, Response } from "express-serve-static-core";
+import { uploadImageAndGetOptimizedUrl } from "@/utils/uploadToImageKit.ts";
 
 
 export const getBlogsForAuthor = async (req: Request<{}, {}, {}, { limit?: number, page?: number }>, res: Response) => {
@@ -28,6 +29,7 @@ export const getBlogsForAuthor = async (req: Request<{}, {}, {}, { limit?: numbe
             pagination: {
                 currentPage: page,
                 totalPages,
+                pageSize: limit,
                 hasNextPage: page < totalPages,
                 hasPrevPage: page > 1
             }
@@ -116,9 +118,30 @@ export const getBlogById = async (req: Request<{ id: string }>, res: Response) =
 export const createBlog = async (req: Request<{}, {}, CreateBlogInput>, res: Response) => {
     try {
         const authorId = (req.user as { _id: string });
+        const imageFile = req.file;
+
+        if (!imageFile) {
+            res.status(400).json({
+                success: false,
+                message: "Validation error",
+                errors: [
+                    {
+                        field: "image",
+                        msg: "Image is required"
+                    }
+                ]
+            })
+            return;
+        }
+
+        const optimizedImageUrl = await uploadImageAndGetOptimizedUrl(
+            imageFile.buffer,
+            imageFile.originalname
+        )
 
         const blog = await Blog.create({
             author: authorId,
+            image: optimizedImageUrl,
             ...req.body
         })
 
@@ -159,6 +182,17 @@ export const updateBlog = async (req: Request<{ id: string }, {}, UpdateBlogInpu
                 message: "You are not authorized to update this blog"
             })
             return;
+        }
+
+        const imageFile = req.file;
+
+        if (imageFile) {
+            const optimizedImageUrl = await uploadImageAndGetOptimizedUrl(
+                imageFile.buffer,
+                imageFile.originalname
+            )
+
+            blog.image = optimizedImageUrl;
         }
 
         Object.assign(blog, req.body);

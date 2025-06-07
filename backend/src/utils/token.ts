@@ -1,4 +1,4 @@
-import { ENV_VARS } from "@/configs/envVars";
+import { ENV_VARS } from "@/configs/envVars.ts";
 import jwt from "jsonwebtoken";
 
 export const generateAccessToken = (userId: string) => {

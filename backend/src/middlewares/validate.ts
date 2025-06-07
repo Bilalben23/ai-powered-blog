@@ -24,6 +24,7 @@ export const validate = (schema: ValidateOptions) =>
                 if (!result.success) {
                     res.status(400).json({
                         success: false,
+                        message: "Validation error",
                         errors: result.error.errors.map(err => ({
                             field: err.path[0],
                             msg: err.message

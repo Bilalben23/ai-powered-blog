@@ -1,10 +1,10 @@
-import { User } from "@/models/userModel";
+import { User } from "@/models/userModel.ts";
 import type { Request, Response } from "express-serve-static-core";
 import bcrypt, { compare } from "bcrypt";
-import { ENV_VARS } from "@/configs/envVars";
-import { generateAccessToken, generateRefreshToken } from "@/utils/token";
+import { ENV_VARS } from "@/configs/envVars.ts";
+import { generateAccessToken, generateRefreshToken } from "@/utils/token.ts";
 import jwt from "jsonwebtoken";
-import { LoginInput, RegisterInput } from "@/validations/authSchema";
+import { LoginInput, RegisterInput } from "@/validations/authSchema.ts";
 
 
 export const register = async (req: Request<{}, {}, RegisterInput>, res: Response) => {

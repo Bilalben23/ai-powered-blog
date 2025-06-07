@@ -1,8 +1,9 @@
 import { Router } from "express";
-import * as BlogController from "@/controllers/blogController";
-import { authenticateJWT } from "@/middlewares/authenticateJWT";
-import { validate } from "@/middlewares/validate";
-import { createBlogSchema, updateBlogSchema } from "@/validations/blogSchema";
+import * as BlogController from "@/controllers/blogController.ts";
+import { authenticateJWT } from "@/middlewares/authenticateJWT.ts";
+import { validate } from "@/middlewares/validate.ts";
+import { createBlogSchema, updateBlogSchema } from "@/validations/blogSchema.ts";
+import { upload } from "@/middlewares/multer";
 
 const router = Router();
 
@@ -54,6 +55,7 @@ router.get(
 router.post(
     "/",
     authenticateJWT,
+    upload.single("image"),
     validate({ body: createBlogSchema }),
     BlogController.createBlog
 );
@@ -68,6 +70,7 @@ router.post(
 router.patch(
     "/:id",
     authenticateJWT,
+    upload.single("image"),
     validate({ body: updateBlogSchema }),
     BlogController.updateBlog
 );

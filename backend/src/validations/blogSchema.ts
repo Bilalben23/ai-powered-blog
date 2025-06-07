@@ -13,12 +13,10 @@ export const createBlogSchema = z.object({
         required_error: "Description is required"
     }).min(10, "Description must be at least 10 characters"),
     category: z.enum(blogCategories as [string, ...string[]], {
-        required_error: "Category is required"
+        required_error: "Category is required",
+        message: `Category must be one of these: ${blogCategories.join(" | ")}`
     }),
-    image: z.string({
-        required_error: "Image is required"
-    }).url("Image must be a valid URL"),
-    isPublished: z.boolean().optional()
+    isPublished: z.coerce.boolean().optional()
 });
 
 export const updateBlogSchema = createBlogSchema.partial();
