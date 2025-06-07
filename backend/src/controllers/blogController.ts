@@ -1,5 +1,5 @@
 import { Blog, BlogCategory } from "@/models/blogModel.ts";
-import { CreateBlogInput, UpdateBlogInput } from "@/validations/blogSchema.ts";
+import { type CreateBlogInput, type UpdateBlogInput } from "@/validations/blogSchema.ts";
 import { Request, Response } from "express-serve-static-core";
 import { uploadImageAndGetOptimizedUrl } from "@/utils/uploadToImageKit.ts";
 
@@ -65,7 +65,7 @@ export const getBlogsByCategory = async (req: Request<{ category: BlogCategory }
 
         res.status(200).json({
             success: true,
-            message: "",
+            message: `Blogs in category '${category}' retrieved successfully`,
             data: blogs,
             pagination: {
                 currentPage: page,

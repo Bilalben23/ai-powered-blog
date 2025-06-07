@@ -5,9 +5,9 @@ import connectDB from "./configs/db.ts";
 import { configurePassport } from "./configs/passport.ts";
 import cookieParser from "cookie-parser";
 import passport from "passport";
-import authRouter from "./routes/authRoutes.ts";
-import blogsRouter from "./routes/blogRoutes.ts";
-
+import authRoutes from "./routes/authRoutes.ts";
+import blogsRoutes from "./routes/blogRoutes.ts";
+import commentsRoutes from "./routes/commentRoutes.ts";
 
 const app = express();
 configurePassport();
@@ -26,8 +26,9 @@ app.use(cors({
 app.use(passport.initialize());
 
 
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/blogs", blogsRouter);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/blogs", blogsRoutes);
+app.use("/api/v1/comments", commentsRoutes);
 
 
 app.listen(ENV_VARS.PORT, () => {

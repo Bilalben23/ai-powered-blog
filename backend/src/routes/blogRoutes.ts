@@ -60,6 +60,7 @@ router.post(
     BlogController.createBlog
 );
 
+
 /**
  * @route PATCH /api/v1/blogs/:id/published
  * @desc Toggle the `isPublished` status of a blog post (publish/unpublish)
