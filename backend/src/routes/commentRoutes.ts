@@ -45,6 +45,18 @@ router.post(
 
 
 /**
+ * @route PATCH /api/v1/comments/:id/approve
+ * @desc Approve a comment
+ * @access Private
+ */
+router.patch(
+    "/:id/approve",
+    authenticateJWT,
+    CommentController.approveComment
+)
+
+
+/**
  * @route DELETE /api/v1/comments/:id
  * @desc Delete a comment
  * @access Private

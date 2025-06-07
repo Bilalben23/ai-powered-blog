@@ -1,6 +1,6 @@
 import { Blog } from "@/models/blogModel.ts";
 import { Comment } from "@/models/commentModel.ts";
-import { type CreateCommentInput } from "@/validations/commentSchema.ts";
+import { createCommentSchema, type CreateCommentInput } from "@/validations/commentSchema.ts";
 import { Request, Response } from "express-serve-static-core";
 
 
@@ -89,7 +89,7 @@ export const getApprovedCommentsForBlog = async (req: Request<{ blogId: string }
 export const createComment = async (req: Request<{ blogId: string }, {}, CreateCommentInput>, res: Response) => {
 
     const { blogId } = req.params;
-    const { name, content, isApproved } = req.body;
+    const { name, content } = req.body;
 
     try {
         const blogExists = await Blog.exists({ _id: blogId });
@@ -104,8 +104,7 @@ export const createComment = async (req: Request<{ blogId: string }, {}, CreateC
         const comment = await Comment.create({
             blog: blogId,
             name,
-            content,
-            isApproved
+            content
         })
 
         res.status(201).json({
@@ -122,6 +121,62 @@ export const createComment = async (req: Request<{ blogId: string }, {}, CreateC
         })
     }
 }
+
+
+export const approveComment = async (req: Request<{ id: string }>, res: Response) => {
+
+    const commentId = req.params.id;
+    const userId = (req.user as { _id: string })._id.toString();
+
+    try {
+
+        // Find the comment
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            res.status(404).json({
+                success: false,
+                message: "Comment not found"
+            })
+            return;
+        }
+
+        // Find the blog associated with the comment
+        const blog = await Blog.findById(comment.blog);
+        if (!blog) {
+            res.status(404).json({
+                success: false,
+                message: "Blog associated with this comment not found"
+            })
+            return;
+        }
+
+        // Check if the authenticated user is the blog's author
+        if (blog.author.toString() !== userId) {
+            res.status(403).json({
+                success: false,
+                message: "You are not authorized to approve comments on this blog"
+            })
+            return;
+        }
+
+        comment.isApproved = true;
+        await comment.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Comment approved successfully",
+            data: comment
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: err instanceof Error ? err.message : "Something went wrong"
+        })
+    }
+}
+
 
 
 export const deleteComment = async (req: Request<{ id: string }>, res: Response) => {
