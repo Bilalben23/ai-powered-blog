@@ -14,7 +14,8 @@ export const createCommentSchema = z.object({
         invalid_type_error: "Content must be a string"
     })
         .min(3, "Content must be at least 3 characters")
-        .max(1000, "Content must be at most 100 characters")
+        .max(1000, "Content must be at most 100 characters"),
+    isApproved: z.boolean().optional()
 })
 
 export type CreateCommentInput = z.infer<typeof createCommentSchema>;
