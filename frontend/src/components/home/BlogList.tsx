@@ -6,6 +6,7 @@ import BlogCard from './BlogCard';
 import useBlogsByCategory, { type BlogCategoryFilter, fetchBlogsByCategory } from '@hooks/useBlogsByCategory';
 import { useQueryClient } from '@tanstack/react-query';
 import { Ban } from 'lucide-react';
+import BlogCardSkeleton from '@components/skeletons/BlogCardSkeleton';
 
 
 export default function BlogList() {
@@ -76,10 +77,10 @@ export default function BlogList() {
                     <div className='col-span-full text-center text-red-600'>
                         <p>{error.message}</p>
                     </div>
-                ) : isLoading ? (
-                    <div className='col-span-full text-center'>
-                        <p>Loading...</p>
-                    </div>
+                ) : !isLoading ? (
+                    Array.from({ length: 8 }).map((_, i) => <BlogCardSkeleton
+                        key={i}
+                    />)
                 ) : (
                     blogs?.length === 0
                         ? <div className="col-span-full flex flex-col items-center justify-center py-12 text-gray-500">

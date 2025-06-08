@@ -26,7 +26,6 @@ const BlogCard: FC<BlogCardProps> = ({ id, image, category, title, description }
                 />
             </div>
             <div className='p-4'>
-
                 <span className='inline-block px-3 py-1.5 mb-4 text-sm rounded-full capitalize shadow-xs bg-primary/10 text-primary'>{category}</span>
                 <p className='mb-2 text-lg font-medium text-gray-900'>{title}</p>
                 <p className='mb-3 text-sm text-gray-600 line-clamp-3' dangerouslySetInnerHTML={{ __html: description }} />
