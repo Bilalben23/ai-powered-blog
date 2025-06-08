@@ -8,6 +8,7 @@ import passport from "passport";
 import authRoutes from "./routes/authRoutes.ts";
 import blogsRoutes from "./routes/blogRoutes.ts";
 import commentsRoutes from "./routes/commentRoutes.ts";
+import newsletterRoutes from "./routes/newsletterRoutes.ts";
 
 const app = express();
 configurePassport();
@@ -29,6 +30,7 @@ app.use(passport.initialize());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/blogs", blogsRoutes);
 app.use("/api/v1/comments", commentsRoutes);
+app.use("/api/v1/newsletter", newsletterRoutes);
 
 
 app.listen(ENV_VARS.PORT, "0.0.0.0", () => {

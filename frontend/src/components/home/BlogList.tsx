@@ -77,7 +77,7 @@ export default function BlogList() {
                     <div className='col-span-full text-center text-red-600'>
                         <p>{error.message}</p>
                     </div>
-                ) : !isLoading ? (
+                ) : isLoading ? (
                     Array.from({ length: 8 }).map((_, i) => <BlogCardSkeleton
                         key={i}
                     />)

@@ -1,6 +1,6 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Schema, Types, Document } from "mongoose";
 
-export interface CommentDocument extends Document {
+export interface ICommentDocument extends Document<Types.ObjectId> {
     blog: Types.ObjectId;
     name: string;
     content: string;
@@ -8,21 +8,21 @@ export interface CommentDocument extends Document {
 }
 
 
-const commentSchema = new Schema<CommentDocument>({
+const commentSchema = new Schema<ICommentDocument>({
     blog: {
         type: Schema.Types.ObjectId,
         ref: "Blog",
-        required: true
+        required: [true, "Blog id is required"]
     },
     name: {
         type: String,
-        required: true,
+        required: [true, "Name is required"],
         trim: true,
         maxlength: 30
     },
     content: {
         type: String,
-        required: true,
+        required: [true, "Content is required"],
         trim: true,
         maxlength: 1000
     },

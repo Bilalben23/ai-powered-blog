@@ -11,6 +11,7 @@ export const getBlogsForAuthor = async (req: Request<{}, {}, {}, { limit?: numbe
 
         const limit = Number(req.query.limit) || 10;
         const page = Number(req.query.page) || 1;
+        const skip = (page - 1) * limit;
 
         const authorId = (req.user as { _id: string })._id;
 
@@ -20,7 +21,7 @@ export const getBlogsForAuthor = async (req: Request<{}, {}, {}, { limit?: numbe
         const blogs = await Blog.find({ author: authorId })
             .select("title isPublished createdAt")
             .sort({ createdAt: -1 })
-            .skip((page - 1) * limit)
+            .skip(skip)
             .limit(limit)
             .lean();
 
@@ -103,6 +104,7 @@ export const getBlogsByCategory = async (req: Request<{ category: ExtendedCatego
         const { category } = req.params;
         const limit = Number(req.query.limit) || 10;
         const page = Number(req.query.page) || 1;
+        const skip = (page - 1) * limit;
 
         const filter: Record<string, any> = { isPublished: true };
 
@@ -116,7 +118,7 @@ export const getBlogsByCategory = async (req: Request<{ category: ExtendedCatego
         const blogs = await Blog.find(filter)
             .select("title description category image")
             .sort({ createdAt: -1 })
-            .skip((page - 1) * limit)
+            .skip(skip)
             .limit(limit)
             .lean();
 

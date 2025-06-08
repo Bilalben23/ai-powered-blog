@@ -1,5 +1,5 @@
 import * as CommentController from "@/controllers/commentController.ts";
-import { authenticateJWT } from "@/middlewares/authenticateJWT";
+import { authenticateJWT } from "@/middlewares/authenticateJWT.ts";
 import { validate } from "@/middlewares/validate.ts";
 import { createCommentSchema } from "@/validations/commentSchema.ts";
 import { Router } from "express";

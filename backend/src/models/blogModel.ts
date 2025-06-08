@@ -1,9 +1,9 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Schema, Types, Document } from "mongoose";
 
 export const blogCategories = ['startup', 'technology', 'lifestyle', 'finance'] as const;
 export type BlogCategory = typeof blogCategories[number];
 
-export interface IBlog extends Document {
+export interface IBlog extends Document<Types.ObjectId> {
     author: Types.ObjectId;
     title: string;
     subTitle: string;
@@ -18,28 +18,28 @@ const blogSchema = new Schema<IBlog>({
     author: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: [true, "Author id is required"]
     },
     title: {
         type: String,
-        required: true
+        required: [true, "Title is required"]
     },
     subTitle: {
         type: String,
-        required: true
+        required: [true, "Subtitle is required"]
     },
     description: {
         type: String,
-        required: true
+        required: [true, "Description is required"]
     },
     category: {
         type: String,
         enum: blogCategories,
-        required: true
+        required: [true, "Category is required"]
     },
     image: {
         type: String,
-        required: true
+        required: [true, "Image is required"]
     },
     isPublished: {
         type: Boolean,
