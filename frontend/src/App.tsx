@@ -9,25 +9,29 @@ import AdminAddBlog from '@pages/admin/AdminAddBlog';
 import AdminBlogList from '@pages/admin/AdminBlogList';
 import AdminComments from '@pages/admin/AdminComments';
 import ProtectedRoute from '@components/ProtectedRoute';
+import PersistLogin from '@components/PersistLogin';
 
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<AppLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path='blog/:id' element={<BlogPage />} />
 
-        </Route>
+        <Route element={<PersistLogin />}>
+          <Route path='/' element={<AppLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path='blog/:id' element={<BlogPage />} />
 
-        <Route element={<ProtectedRoute />}>
-          <Route path='/admin' element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path='blogs/new' element={<AdminAddBlog />} />
-            <Route path='blogs' element={<AdminBlogList />} />
-            <Route path='comments' element={<AdminComments />} />
+          </Route>
 
+          <Route element={<ProtectedRoute />}>
+            <Route path='/admin' element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path='blogs/new' element={<AdminAddBlog />} />
+              <Route path='blogs' element={<AdminBlogList />} />
+              <Route path='comments' element={<AdminComments />} />
+
+            </Route>
           </Route>
         </Route>
 

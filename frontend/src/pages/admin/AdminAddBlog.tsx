@@ -4,32 +4,9 @@ import { useEffect, useRef } from 'react';
 import { motion } from "motion/react";
 import { Pencil } from 'lucide-react';
 import Quill from 'quill';
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
-
-
-const blogFormSchema = z.object({
-    thumbnail: z.instanceof(File, {
-        message: "Thumbnail is required"
-    }),
-    title: z.string()
-        .trim()
-        .min(3, "Title must be at least 3 characters"),
-    subtitle: z.string()
-        .trim()
-        .min(3, "Subtitle must be at least 3 characters"),
-    category: z.enum(blogCategories as [string, ...string[]], {
-        message: `Category must be one of these: ${blogCategories.join(" | ")}`
-    }),
-    isPublished: z.boolean(),
-    description: z.string()
-        .trim()
-        .min(10, 'Description must be at least 10 characters')
-})
-
-
-type BlogFormData = z.infer<typeof blogFormSchema>;
+import { blogSchema, type BlogFormInputs } from '@validations/blogSchema';
 
 
 export default function AdminAddBlog() {
@@ -40,8 +17,8 @@ export default function AdminAddBlog() {
         register,
         getValues,
         formState: { errors }
-    } = useForm<BlogFormData>({
-        resolver: zodResolver(blogFormSchema),
+    } = useForm<BlogFormInputs>({
+        resolver: zodResolver(blogSchema),
         defaultValues: {
             thumbnail: undefined,
             title: "",

@@ -22,7 +22,7 @@ export default function Login() {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm({
+    } = useForm<LoginFormInputs>({
         defaultValues: INITIAL_STATE,
         resolver: zodResolver(loginSchema)
     })
