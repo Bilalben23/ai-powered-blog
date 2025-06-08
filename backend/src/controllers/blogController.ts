@@ -3,6 +3,7 @@ import { Blog, type BlogCategory } from "@/models/blogModel.ts";
 import { type CreateBlogInput, type UpdateBlogInput } from "@/validations/blogSchema.ts";
 import { uploadImageAndGetOptimizedUrl } from "@/utils/uploadToImageKit.ts";
 import { Comment } from "@/models/commentModel.ts";
+type ExtendedCategory = BlogCategory | "all";
 
 
 export const getBlogsForAuthor = async (req: Request<{}, {}, {}, { limit?: number, page?: number }>, res: Response) => {
@@ -97,13 +98,17 @@ export const getDashboardStats = async (req: Request, res: Response) => {
 }
 
 
-export const getBlogsByCategory = async (req: Request<{ category: BlogCategory }, {}, {}, { limit?: number, page?: number }>, res: Response) => {
+export const getBlogsByCategory = async (req: Request<{ category: ExtendedCategory }, {}, {}, { limit?: number, page?: number }>, res: Response) => {
     try {
         const { category } = req.params;
         const limit = Number(req.query.limit) || 10;
         const page = Number(req.query.page) || 1;
 
-        const filter = { category, isPublished: true };
+        const filter: Record<string, any> = { isPublished: true };
+
+        if (category !== "all") {
+            filter.category = category;
+        }
 
         const totalBlogs = await Blog.countDocuments(filter);
         const totalPages = Math.ceil(totalBlogs / limit);
@@ -117,7 +122,9 @@ export const getBlogsByCategory = async (req: Request<{ category: BlogCategory }
 
         res.status(200).json({
             success: true,
-            message: `Blogs in category '${category}' retrieved successfully`,
+            message: category === "all"
+                ? `All blogs retrieved successfully`
+                : `Blogs in category '${category}' retrieved successfully`,
             data: blogs,
             pagination: {
                 currentPage: page,

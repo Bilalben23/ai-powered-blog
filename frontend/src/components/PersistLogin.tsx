@@ -22,7 +22,7 @@ export default function PersistLogin() {
         !isAuthenticated ? verifyRefreshToken() : setLoading(false);
     }, [isAuthenticated, refresh])
 
-    return !loading
+    return loading
         ? <div className="flex items-center justify-center h-screen">
             <HashLoader />
         </div>

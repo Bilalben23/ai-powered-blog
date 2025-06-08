@@ -8,7 +8,7 @@ export default function useRefresh() {
 
     const refresh = async (): Promise<string | null> => {
         try {
-            const { data } = await axiosInstance.get("/v1/auth/refreshToken");
+            const { data } = await axiosInstance.post("/v1/auth/refresh-token");
 
             const result = refreshResponseSchema.safeParse(data);
             if (!result.success) {
