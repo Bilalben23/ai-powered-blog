@@ -31,7 +31,7 @@ app.use("/api/v1/blogs", blogsRoutes);
 app.use("/api/v1/comments", commentsRoutes);
 
 
-app.listen(ENV_VARS.PORT, () => {
+app.listen(ENV_VARS.PORT, "0.0.0.0", () => {
     console.log(`✅ App is running on http://localhost:${ENV_VARS.PORT}`);
     connectDB();
 })

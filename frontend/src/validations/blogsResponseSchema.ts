@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 export const blogCategories = ['technology', 'startup', 'lifestyle', 'finance'] as const;
-export type Category = typeof blogCategories[number];
+export type BlogCategory = typeof blogCategories[number];
 
 
 export const blogSchema = z.object({
     _id: z.string(),
     title: z.string(),
-    subTitle: z.string(),
+    description: z.string(),
     category: z.enum(blogCategories),
     image: z.string().url()
 })

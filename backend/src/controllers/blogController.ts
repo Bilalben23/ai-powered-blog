@@ -114,7 +114,7 @@ export const getBlogsByCategory = async (req: Request<{ category: ExtendedCatego
         const totalPages = Math.ceil(totalBlogs / limit);
 
         const blogs = await Blog.find(filter)
-            .select("title subTitle category image")
+            .select("title description category image")
             .sort({ createdAt: -1 })
             .skip((page - 1) * limit)
             .limit(limit)
