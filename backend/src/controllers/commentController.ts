@@ -1,6 +1,6 @@
 import { Blog } from "@/models/blogModel.ts";
 import { Comment } from "@/models/commentModel.ts";
-import { createCommentSchema, type CreateCommentInput } from "@/validations/commentSchema.ts";
+import { type CreateCommentInput } from "@/validations/commentSchema.ts";
 import { Request, Response } from "express-serve-static-core";
 
 
@@ -16,7 +16,6 @@ export const getAllComments = async (req: Request<{}, {}, {}, { isApproved?: str
     } else {
         filter.isApproved = true;
     }
-
 
     try {
 
@@ -176,7 +175,6 @@ export const approveComment = async (req: Request<{ id: string }>, res: Response
         })
     }
 }
-
 
 
 export const deleteComment = async (req: Request<{ id: string }>, res: Response) => {

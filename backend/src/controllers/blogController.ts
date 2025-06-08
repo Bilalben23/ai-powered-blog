@@ -1,5 +1,5 @@
-import { Request, Response } from "express-serve-static-core";
-import { Blog, BlogCategory } from "@/models/blogModel.ts";
+import type { Request, Response } from "express-serve-static-core";
+import { Blog, type BlogCategory } from "@/models/blogModel.ts";
 import { type CreateBlogInput, type UpdateBlogInput } from "@/validations/blogSchema.ts";
 import { uploadImageAndGetOptimizedUrl } from "@/utils/uploadToImageKit.ts";
 import { Comment } from "@/models/commentModel.ts";
@@ -330,7 +330,11 @@ export const deleteBlog = async (req: Request<{ id: string }>, res: Response) =>
             return;
         }
 
+        // Delete the blog
         const deletedBlog = await Blog.findByIdAndDelete(blogId);
+
+        // Delete all comments related to this blog
+        await Comment.deleteMany({ blog: blogId });
 
         res.status(200).json({
             success: true,

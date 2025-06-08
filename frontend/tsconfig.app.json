@@ -17,6 +17,7 @@
       "@utils/*": ["utils/*"],
       "@context/*": ["context/*"],
       "@hooks/*": ["hooks/*"],
+      "@validations/*": ["validations/*"]
     },
 
     /* Bundler mode */

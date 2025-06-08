@@ -14,7 +14,8 @@
       "@constants/*": ["constants/*"],
       "@utils/*": ["utils/*"],
       "@context/*": ["context/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@validations/*": ["validations/*"]
     }
   }
 }
