@@ -2,13 +2,13 @@ import BlogCommentsList from '@components/blog/BlogCommentsList';
 import ErrorMessage from '@components/ErrorMessage';
 import BlogDetailsSkeleton from '@components/skeletons/BlogDetailsSkeleton';
 import { assets } from '@constants/assets';
-import { commentsData, type Comment } from '@constants/commentsData';
 import { zodResolver } from '@hookform/resolvers/zod';
+import useApprovedComments from '@hooks/useApprovedComments';
 import useBlogById from '@hooks/useBlogById';
 import useCreateComment from '@hooks/useCreateComment';
 import { formatDateStandard } from '@utils/formatDate';
 import { createCommentSchema } from '@validations/commentSchema';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
@@ -41,11 +41,13 @@ export default function BlogPage() {
 
     const { mutate: createComment, isPending } = useCreateComment(id);
 
-    const [comments, setComments] = useState<Comment[]>([]);
+    const {
+        data: comments,
+        isLoading: isCommentsLoading,
+        isError: isCommentsError,
+        error: commentError
 
-    const [isCommentsError, setIsCommentsError] = useState(false);
-    const [isCommentsLoading, setIsCommentsLoading] = useState(false);
-
+    } = useApprovedComments(id);
 
 
     const onsSubmit = () => {
@@ -63,34 +65,6 @@ export default function BlogPage() {
         })
     }
 
-
-    const fetchComments = async () => {
-        setIsCommentsLoading(true);
-        setIsCommentsError(false);
-
-        try {
-            const result = await new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    const found = commentsData.filter(comment => comment.blog._id === id);
-                    if (found) {
-                        resolve(found);
-                    } else {
-                        reject(new Error("Blog not found for getting the comments"));
-                    }
-                }, 4000)
-            })
-
-            setComments(result as Comment[]);
-        } catch (err) {
-            setIsCommentsError(true);
-        } finally {
-            setIsCommentsLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        fetchComments();
-    }, [])
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -149,9 +123,10 @@ export default function BlogPage() {
 
                         {/* Comments Section */}
                         <div className='max-w-3xl my-12'>
-                            <p className='mb-4 font-semibold'>Comments ({comments.length})</p>
+                            <p className='mb-4 font-semibold'>Comments ({comments?.length})</p>
                             <BlogCommentsList
                                 isError={isCommentsError}
+                                error={commentError?.message}
                                 isLoading={isCommentsLoading}
                                 comments={comments}
                             />

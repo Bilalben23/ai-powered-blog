@@ -1,20 +1,23 @@
-import type { Comment } from '@constants/commentsData';
 import type { FC } from 'react';
 import CommentCard from './CommentCard';
 import CommentCardSkeleton from '@components/skeletons/CommentCardSkeleton';
+import type { Comment } from '@hooks/useApprovedComments';
+import ErrorMessage from '@components/ErrorMessage';
 
 type BlogCommentsListProps = {
     isLoading: boolean;
     isError: boolean;
-    comments: Comment[]
+    error?: string;
+    comments?: Comment[]
 }
 
-const BlogCommentsList: FC<BlogCommentsListProps> = ({ isLoading, isError, comments }) => {
+const BlogCommentsList: FC<BlogCommentsListProps> = ({ isLoading, isError, error, comments }) => {
 
     if (isError) {
-        return <div>
-            <p>Error occured while fecthing comments</p>
-        </div>
+        return <ErrorMessage
+            title="Failed to load comments"
+            message={error}
+        />
     }
 
     if (isLoading) {
@@ -28,15 +31,17 @@ const BlogCommentsList: FC<BlogCommentsListProps> = ({ isLoading, isError, comme
     }
 
 
-    if (comments.length === 0) {
-        return <div>
-            <p>No comments yet for this blog</p>
+    if (comments?.length === 0) {
+        return <div className="py-6 text-center text-gray-600">
+            <p className="text-lg font-medium">No comments yet</p>
+            <p className="text-sm text-gray-500">Be the first to share your thoughts on this post.</p>
         </div>
+
     }
 
     return (
         <div className='flex flex-col gap-y-6'>
-            {comments.map(comment => (
+            {comments?.map(comment => (
                 <CommentCard
                     key={comment._id}
                     name={comment.name}

@@ -11,21 +11,21 @@ type CommentCardProps = {
 
 const CommentCard: FC<CommentCardProps> = ({ name, content, createdAt }) => {
     return (
-        <div className='flex justify-between p-5 border-2 rounded-md gap-x-8 bg-primary/2 border-primary/5'>
-            <div className='flex gap-x-3'>
-                <div className='shrink-0'>
-                    <img
-                        src={assets.user_icon}
-                        alt={`${name}'s avatar`}
-                        className='size-8'
-                    />
-                </div>
-                <div>
-                    <p className='mb-2 text-lg font-medium'>{name}</p>
-                    <p className='font-light text-gray-700'>{content}</p>
-                </div>
+        <div className='flex flex-col p-3 border-2 rounded-md sm:p-5 gap-y-2 bg-primary/2 border-primary/5'>
+            <div className='flex items-center w-full gap-x-3'>
+                <img
+                    src={assets.user_icon}
+                    alt={`${name}'s avatar`}
+                    className='size-9'
+                />
+                <p className='text-lg font-medium'>{name}</p>
             </div>
-            <div className='self-end shrink-0'>
+
+            <div className='pl-12'>
+                <p className='font-light text-gray-700'>{content}</p>
+            </div>
+
+            <div className='self-end mt-1'>
                 <p className='text-sm font-light text-gray-500'>{timeAgo(createdAt)}</p>
             </div>
         </div>
