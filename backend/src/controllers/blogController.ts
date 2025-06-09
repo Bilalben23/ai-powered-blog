@@ -243,7 +243,11 @@ export const togglePublish = async (req: Request<{ id: string }, {}, UpdateBlogI
         res.status(200).json({
             success: true,
             message: `Blog ${blog.isPublished ? "published" : "unpublished"} successfully`,
-            data: blog,
+            data: {
+                _id: blog._id,
+                category: blog.category,
+                isPublished: blog.isPublished
+            }
         });
 
     } catch (err) {

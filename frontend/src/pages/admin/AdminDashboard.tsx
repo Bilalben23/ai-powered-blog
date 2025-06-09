@@ -9,13 +9,6 @@ export default function AdminDashboard() {
     const totalComments = data?.totalComments;
     const totalDrafts = data?.totalDrafts;
 
-
-
-    const handleToggleBlogPublish = (id: string) => {
-        // TODO: Implement a PATCH request to the backend to toggle publish status
-        console.log(`🔄 Toggling publish status for blog with ID: ${id}`);
-    }
-
     return (
         <section className='flex-1 w-full p-3 sm:p-6 md:p-10'>
             <div className='flex flex-wrap gap-4'>
@@ -80,7 +73,6 @@ export default function AdminDashboard() {
                     isLoading={isLoading}
                     isError={isError}
                     error={error?.message}
-                    onTogglePublish={handleToggleBlogPublish}
                 />
             </div>
         </section>
