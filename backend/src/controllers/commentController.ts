@@ -67,7 +67,8 @@ export const getApprovedCommentsForBlog = async (req: Request<{ blogId: string }
         const comments = await Comment.find({
             blog: blogId,
             isApproved: true
-        }).sort({ createdAt: -1 })
+        }).select("-__v -blog -isApproved")
+            .sort({ createdAt: -1 })
             .lean()
 
         res.status(200).json({
