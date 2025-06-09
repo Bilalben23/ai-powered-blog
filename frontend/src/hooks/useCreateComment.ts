@@ -12,10 +12,12 @@ type CreateCommentInput = {
     content: string
 }
 
-export default function useCreateComment(blogId: string) {
+export default function useCreateComment(blogId?: string) {
     return useMutation({
         mutationKey: ["createComment", blogId],
         mutationFn: async (commentData: CreateCommentInput) => {
+            if (!blogId) throw new Error("Blog ID is required");
+
             const { data } = await axiosInstance.post(`/v1/comments/${blogId}`, commentData);
 
             const parsed = commentResponseSchema.safeParse(data);
@@ -25,6 +27,7 @@ export default function useCreateComment(blogId: string) {
             }
 
             return parsed.data
-        }
+        },
+
     })
 }

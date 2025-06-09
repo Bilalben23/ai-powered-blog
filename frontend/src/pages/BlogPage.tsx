@@ -3,19 +3,34 @@ import ErrorMessage from '@components/ErrorMessage';
 import BlogDetailsSkeleton from '@components/skeletons/BlogDetailsSkeleton';
 import { assets } from '@constants/assets';
 import { commentsData, type Comment } from '@constants/commentsData';
+import { zodResolver } from '@hookform/resolvers/zod';
 import useBlogById from '@hooks/useBlogById';
+import useCreateComment from '@hooks/useCreateComment';
 import { formatDateStandard } from '@utils/formatDate';
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
-import { useParams } from 'react-router-dom'
+import { createCommentSchema } from '@validations/commentSchema';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
 
-
-const INITIAL_COMMENT_DATA = {
-    name: "",
-    comment: ""
-}
 
 export default function BlogPage() {
     const { id } = useParams<{ id?: string }>();
+    const {
+        register,
+        handleSubmit,
+        getValues,
+        formState: {
+            errors
+        },
+        reset
+    } = useForm({
+        resolver: zodResolver(createCommentSchema),
+        defaultValues: {
+            name: "",
+            content: ""
+        }
+    })
 
     const {
         data: blog,
@@ -24,31 +39,29 @@ export default function BlogPage() {
         error: blogError
     } = useBlogById(id);
 
+    const { mutate: createComment, isPending } = useCreateComment(id);
+
     const [comments, setComments] = useState<Comment[]>([]);
 
     const [isCommentsError, setIsCommentsError] = useState(false);
     const [isCommentsLoading, setIsCommentsLoading] = useState(false);
 
-    const [commentData, setCommentData] = useState(INITIAL_COMMENT_DATA);
 
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setCommentData(prevData => ({
-            ...prevData,
-            [name]: value
-        }))
+    const onsSubmit = () => {
+        createComment(getValues(), {
+            onSuccess: () => {
+                toast.success("Your comment has been submitted and is awaiting approval", {
+                    duration: 3000
+                });
+                reset()
+            },
+            onError: (err) => {
+                console.error(err.message);
+                toast.error("Something went wrong. Please try again later.")
+            }
+        })
     }
-
-
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        // TODO: sending the comment to the backend...
-        console.log("sending the comment...", commentData);
-    }
-
-
 
 
     const fetchComments = async () => {
@@ -147,29 +160,32 @@ export default function BlogPage() {
                         {/* Add comment section */}
                         <div className='max-w-2xl'>
                             <p className='mb-4 font-semibold'>Add your comment</p>
-                            <form className='flex flex-col items-start gap-y-5' onSubmit={handleSubmit}>
-                                <input
-                                    type="text"
-                                    name='name'
-                                    placeholder="Your name"
-                                    className="w-full p-3 transition border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                                    onChange={handleChange}
-                                    value={commentData.name}
-                                    required
-                                />
-                                <textarea
-                                    name="comment"
-                                    placeholder="Your comment..."
-                                    className="w-full p-3 transition border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 max-h-[400px] focus:ring-primary"
-                                    rows={7}
-                                    onChange={handleChange}
-                                    value={commentData.comment}
-                                    required
-                                ></textarea>
+                            <form className='flex flex-col items-start gap-y-5' onSubmit={handleSubmit(onsSubmit)}>
+                                <div className='w-full'>
+                                    <input
+                                        type="text"
+                                        {...register("name")}
+                                        placeholder="Your name"
+                                        className={`w-full p-3 transition border rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary ${errors.name ? "border-red-500" : "border-gray-300"}`}
+                                    />
+                                    {errors.name && <p className='text-sm font-light text-red-500'>{errors.name.message}</p>}
+                                </div>
+                                <div className='w-full'>
+                                    <textarea
+                                        {...register("content")}
+                                        placeholder="Your comment..."
+                                        className={`w-full p-3 transition border rounded-md outline-none focus:border-primary focus:ring-1 max-h-[400px] focus:ring-primary ${errors.content ? "border-red-500" : "border-gray-300"}`}
+                                        rows={7}
+                                    ></textarea>
+                                    {errors.content && <p className='text-sm font-light text-red-500'>{errors.content.message}</p>}
+                                </div>
                                 <button
                                     type="submit"
-                                    className='px-8 py-2 text-white transition rounded-md shadow-xs cursor-pointer hover:bg-primary/95 hover:shadow-none bg-primary hover:scale-102'
-                                >Submit</button>
+                                    className='px-8 py-2 text-white transition rounded-md shadow-xs cursor-pointer disabled:opacity-75 hover:bg-primary/95 hover:shadow-none bg-primary hover:scale-102'
+                                    disabled={isPending}
+                                >
+                                    {isPending ? "Submitting..." : "Submit"}
+                                </button>
                             </form>
                         </div>
 
