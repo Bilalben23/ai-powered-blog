@@ -11,7 +11,7 @@ export const blogSchema = z.object({
     subtitle: z.string()
         .trim()
         .min(3, "Subtitle must be at least 3 characters"),
-    category: z.enum(blogCategories as [string, ...string[]], {
+    category: z.enum(blogCategories, {
         message: `Category must be one of these: ${blogCategories.join(" | ")}`
     }),
     isPublished: z.boolean(),

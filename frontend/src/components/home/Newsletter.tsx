@@ -25,6 +25,7 @@ export default function Newsletter() {
             },
             onError: (err) => {
                 if (isAxiosError(err) && err.response) {
+                    console.error(err.response);
                     toast.error(err.response.data.message || "Subscription failed");
                 } else {
                     toast.error("Something went wrong");

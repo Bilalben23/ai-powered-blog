@@ -1,6 +1,15 @@
 import axiosInstance from "@utils/axiosInstance";
 import { useAuth } from "./useAuth";
-import { refreshResponseSchema } from "@validations/authResponseSchema";
+import { z } from "zod";
+
+const refreshResponseSchema = z.object({
+    user: z.object({
+        id: z.string(),
+        name: z.string(),
+        email: z.string().email()
+    }),
+    accessToken: z.string()
+})
 
 
 export default function useRefresh() {
@@ -12,7 +21,7 @@ export default function useRefresh() {
 
             const result = refreshResponseSchema.safeParse(data);
             if (!result.success) {
-                console.error("Validation failed: ", result.error.format());
+                console.error("Validation failed:", result.error.format());
                 return null;
             }
 

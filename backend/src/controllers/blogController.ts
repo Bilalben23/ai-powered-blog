@@ -150,7 +150,10 @@ export const getBlogById = async (req: Request<{ id: string }>, res: Response) =
     try {
         const blogId = req.params.id;
 
-        const blog = await Blog.findById(blogId).lean();
+        const blog = await Blog.findOne({ _id: blogId, isPublished: true })
+            .select("-isPublished -__v -updatedAt")
+            .populate("author", "name")
+            .lean();
 
         if (!blog) {
             res.status(404).json({

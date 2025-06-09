@@ -1,7 +1,31 @@
+import { blogCategories, type BlogCategory } from '@constants/blogData';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import axiosInstance from '@utils/axiosInstance';
-import { blogsResponseSchema, type BlogCategory } from '@validations/blogsResponseSchema';
+import { z } from "zod";
 
+
+const blogSchema = z.object({
+    _id: z.string(),
+    title: z.string(),
+    description: z.string(),
+    category: z.enum(blogCategories),
+    image: z.string().url()
+})
+
+
+const paginationSchema = z.object({
+    currentPage: z.number(),
+    totalPages: z.number(),
+    hasNextPage: z.boolean(),
+    hasPrevPage: z.boolean()
+})
+
+const blogsResponseSchema = z.object({
+    success: z.boolean(),
+    message: z.string(),
+    data: z.array(blogSchema),
+    pagination: paginationSchema
+})
 
 export type BlogCategoryFilter = "all" | BlogCategory;
 
@@ -14,9 +38,7 @@ type UseBlogsByCategoryParams = {
 export async function fetchBlogsByCategory(category: BlogCategoryFilter, page = 1) {
 
     const { data } = await axiosInstance.get(`/v1/blogs/category/${category}`, {
-        params: {
-            page
-        }
+        params: { page }
     });
 
     const parsed = blogsResponseSchema.safeParse(data);

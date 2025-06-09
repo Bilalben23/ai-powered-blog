@@ -1,7 +1,22 @@
 import { assets } from '@constants/assets';
 import { Search } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Hero() {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const { register, handleSubmit } = useForm({
+        defaultValues: {
+            searchText: ""
+        }
+    })
+
+    function onSubmit() {
+
+    }
+
+
     return (
         <div className='relative mx-6 sm:mx-16 xl:mx-24'>
 
@@ -19,10 +34,11 @@ export default function Hero() {
                     <h1 className='text-3xl font-semibold text-gray-700 sm:text-6xl sm:leading-tight'>Your own <span className='text-primary'>blogging</span>  <br />platform.</h1>
                     <p className='max-w-2xl mx-auto my-6 text-lg font-normal text-gray-500 sm:my-8 max-sm:text-base'>This is your space to think out loud, to share what matters, and to write without filters. Whether it's one word or a thousand, your story starts right here.</p>
 
-                    <form className='flex justify-between md:max-w-lg mx-auto bg-white border border-gray-300 rounded-md shadow-xs gap-x-1.5 p-1 sm:p-1.5'>
+                    <form className='flex justify-between md:max-w-lg mx-auto bg-white border border-gray-300 rounded-md shadow-xs gap-x-1.5 p-1 sm:p-1.5' onSubmit={handleSubmit(onSubmit)}>
 
                         <input
                             type="text"
+                            {...register("searchText")}
                             placeholder='Search for blogs'
                             className='w-full text-gray-500 px-4 py-2.5 sm:py-3 outline-none'
                             required
