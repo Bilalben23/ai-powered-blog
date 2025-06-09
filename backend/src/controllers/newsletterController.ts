@@ -47,6 +47,7 @@ export const getSubscribers = async (req: Request<{}, {}, {}, { page?: number, l
         const [total, subscribers] = await Promise.all([
             NewsletterSubscriber.countDocuments(),
             NewsletterSubscriber.find()
+                .select("email subscribedAt")
                 .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(limit)
@@ -55,7 +56,7 @@ export const getSubscribers = async (req: Request<{}, {}, {}, { page?: number, l
 
         const totalPages = Math.ceil(total / limit);
 
-        res.json(200).json({
+        res.status(200).json({
             success: true,
             message: "Subscribers fetched successfully.",
             data: subscribers,
