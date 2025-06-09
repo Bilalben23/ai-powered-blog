@@ -3,6 +3,7 @@ import CommentCard from './CommentCard';
 import CommentCardSkeleton from '@components/skeletons/CommentCardSkeleton';
 import type { Comment } from '@hooks/useApprovedComments';
 import ErrorMessage from '@components/ErrorMessage';
+import { MessageCircle } from 'lucide-react';
 
 type BlogCommentsListProps = {
     isLoading: boolean;
@@ -33,14 +34,16 @@ const BlogCommentsList: FC<BlogCommentsListProps> = ({ isLoading, isError, error
 
     if (comments?.length === 0) {
         return <div className="py-6 text-center text-gray-600">
+            <MessageCircle className="mx-auto mb-2 text-gray-400" size={32} />
             <p className="text-lg font-medium">No comments yet</p>
             <p className="text-sm text-gray-500">Be the first to share your thoughts on this post.</p>
         </div>
 
+
     }
 
     return (
-        <div className='flex flex-col gap-y-6'>
+        <div className='flex flex-col max-h-screen px-2 overflow-x-auto gap-y-6'>
             {comments?.map(comment => (
                 <CommentCard
                     key={comment._id}

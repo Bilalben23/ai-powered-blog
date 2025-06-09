@@ -12,7 +12,6 @@ const commentSchema = z.object({
 
 export type Comment = z.infer<typeof commentSchema>;
 
-
 const approvedCommentsResponseSchema = z.object({
     success: z.boolean(),
     message: z.string(),

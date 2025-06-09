@@ -111,7 +111,7 @@ export default function BlogPage() {
                             <img
                                 src={blog.image}
                                 alt={blog.title}
-                                className='object-cover rounded-xl aspect-video'
+                                className='object-cover w-full rounded-xl aspect-video'
                             />
                         </div>
                     </div>
