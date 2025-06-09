@@ -2,8 +2,8 @@ import BlogCommentsList from '@components/blog/BlogCommentsList';
 import ErrorMessage from '@components/ErrorMessage';
 import BlogDetailsSkeleton from '@components/skeletons/BlogDetailsSkeleton';
 import { assets } from '@constants/assets';
-import { blogData, type Blog } from '@constants/blogData';
 import { commentsData, type Comment } from '@constants/commentsData';
+import useBlogById from '@hooks/useBlogById';
 import { formatDateStandard } from '@utils/formatDate';
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import { useParams } from 'react-router-dom'
@@ -17,12 +17,14 @@ const INITIAL_COMMENT_DATA = {
 export default function BlogPage() {
     const { id } = useParams<{ id?: string }>();
 
-    // TODO: Send the requests by id to the backend and get the real data.  
-    const [blog, setBlog] = useState<Blog | null>(null);
-    const [comments, setComments] = useState<Comment[]>([]);
+    const {
+        data: blog,
+        isLoading: isBlogLoading,
+        isError: isBlogError,
+        error: blogError
+    } = useBlogById(id);
 
-    const [isBlogError, setIsBlogError] = useState(false);
-    const [isBlogLoading, setIsBlogLoading] = useState(false);
+    const [comments, setComments] = useState<Comment[]>([]);
 
     const [isCommentsError, setIsCommentsError] = useState(false);
     const [isCommentsLoading, setIsCommentsLoading] = useState(false);
@@ -46,29 +48,6 @@ export default function BlogPage() {
         console.log("sending the comment...", commentData);
     }
 
-    const fetchBlog = async () => {
-        setIsBlogLoading(true);
-        setIsBlogError(false);
-
-        try {
-            const result = await new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    const found = blogData.find((blog) => blog._id === id);
-                    if (found) {
-                        resolve(found);
-                    } else {
-                        reject(new Error("Blog not found"));
-                    }
-                }, 3000)
-            })
-
-            setBlog(result as Blog);
-        } catch (err) {
-            setIsBlogError(true);
-        } finally {
-            setIsBlogLoading(false);
-        }
-    }
 
 
 
@@ -90,14 +69,13 @@ export default function BlogPage() {
 
             setComments(result as Comment[]);
         } catch (err) {
-            setIsBlogError(true);
+            setIsCommentsError(true);
         } finally {
             setIsCommentsLoading(false);
         }
     }
 
     useEffect(() => {
-        fetchBlog();
         fetchComments();
     }, [])
 
@@ -110,7 +88,7 @@ export default function BlogPage() {
         return (
             <ErrorMessage
                 title='Oops! Something went wrong.'
-                message="We couldn' t fetch the blog post.Please try refreshing the page or check your connection."
+                message={blogError.message}
             />
         )
     }
@@ -138,7 +116,7 @@ export default function BlogPage() {
                             <h1 className='max-w-2xl mx-auto my-4 text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl'>{blog.title}</h1>
                             <p className='mb-4 font-light text-gray-500'>{blog.subTitle}</p>
                             <div className='inline-flex items-center justify-center gap-4 px-6 py-1.5 mb-2 sm:mb-4 text-sm border rounded-full border-primary bg-primary/5'>
-                                <p className='text-primary'>Micheal Brown</p>
+                                <p className='text-primary'>{blog.author.name}</p>
                             </div>
                         </div>
 

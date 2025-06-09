@@ -24,7 +24,7 @@ const blogResponseSchema = z.object({
 })
 
 
-export default function useBlogById(blogId: string) {
+export default function useBlogById(blogId?: string) {
     return useQuery({
         queryKey: ["blog", blogId],
         queryFn: async () => {
