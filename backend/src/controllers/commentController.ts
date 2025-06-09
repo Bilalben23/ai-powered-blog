@@ -109,8 +109,7 @@ export const createComment = async (req: Request<{ blogId: string }, {}, CreateC
 
         res.status(201).json({
             success: true,
-            message: "Comment created successfully and pending approval",
-            data: comment
+            message: "Comment created successfully and pending approval"
         });
 
     } catch (err) {
