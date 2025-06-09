@@ -50,8 +50,8 @@ export async function fetchBlogsByCategory(category: BlogCategoryFilter, page = 
         blogs: parsed.data.data,
         pagination: parsed.data.pagination
     };
-
 }
+
 
 export default function useBlogsByCategory({ category, page = 1 }: UseBlogsByCategoryParams) {
     return useQuery({

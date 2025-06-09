@@ -1,6 +1,6 @@
 import { blogCategories } from '@constants/blogData';
-import { useQuery } from '@tanstack/react-query'
-import axiosInstance from '@utils/axiosInstance'
+import { useQuery } from '@tanstack/react-query';
+import axiosInstance from '@utils/axiosInstance';
 import { z } from 'zod';
 
 const blogSchema = z.object({

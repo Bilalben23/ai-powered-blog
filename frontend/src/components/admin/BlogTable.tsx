@@ -1,17 +1,36 @@
 import { type FC } from "react";
 import { X } from "lucide-react";
-import type { Blog } from "@constants/blogData";
 import { formatDateReadable } from "@utils/formatDate";
+import type { Blog } from "@hooks/useDashboardStats";
+import useDeleteBlog from "@hooks/useDeleteBlog";
+import toast from "react-hot-toast";
 
 
 type BlogTableProps = {
-    blogs: Blog[],
-    onTogglePublish: (id: string) => void,
-    onDelete: (id: string) => void
+    blogs?: Blog[];
+    isLoading: boolean;
+    isError: boolean;
+    error?: string;
+    onTogglePublish: (id: string) => void
 }
 
 
-const BlogTable: FC<BlogTableProps> = ({ blogs = [], onTogglePublish, onDelete }) => {
+const BlogTable: FC<BlogTableProps> = ({ blogs = [], isLoading, isError, error, onTogglePublish }) => {
+    const { mutate: deleteBlog, isPending } = useDeleteBlog();
+
+    const handleDeleteBlogPost = (id: string) => {
+        deleteBlog(id, {
+            onSuccess: () => {
+                toast.success("Blog post deleted successfully.");
+            },
+            onError: (err) => {
+                console.error(err);
+                toast.error("Failed to delete blog post. Please try again.");
+            }
+        })
+    }
+
+
     return (
         <div className="relative max-w-full mt-5 overflow-x-auto bg-white rounded-lg shadow md:max-w-5xl">
             <table className="w-full text-left">
@@ -63,8 +82,9 @@ const BlogTable: FC<BlogTableProps> = ({ blogs = [], onTogglePublish, onDelete }
                                     </button>
                                     <button
                                         type="button"
-                                        className="p-2 transition border border-red-100 rounded-full shadow-xs cursor-pointer hover:scale-102 hover:opacity-96 bg-red-50 shadow-red-100"
-                                        onClick={() => onDelete(blog._id)}
+                                        className="p-2 transition border border-red-100 rounded-full shadow-xs cursor-pointer hover:scale-102 hover:opacity-96 bg-red-50 shadow-red-100 disabled:opacity-80"
+                                        disabled={isPending}
+                                        onClick={() => handleDeleteBlogPost(blog._id)}
                                     >
                                         <X className="text-red-500 size-4" />
                                     </button>

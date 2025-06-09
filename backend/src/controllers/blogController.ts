@@ -79,16 +79,6 @@ export const getDashboardStats = async (req: Request, res: Response) => {
             }
         })
 
-        res.status(200).json({
-            success: true,
-            message: "Dashboard statistics fetched successfully",
-            data: {
-                totalBlogs,
-                totalComments,
-                latestBlogs
-            }
-        })
-
     } catch (err) {
         res.status(500).json({
             success: false,
@@ -350,8 +340,11 @@ export const deleteBlog = async (req: Request<{ id: string }>, res: Response) =>
 
         res.status(200).json({
             success: true,
-            data: deletedBlog,
-            message: "Blog deleted successfully"
+            message: "Blog deleted successfully",
+            data: {
+                _id: deletedBlog?._id,
+                category: deletedBlog?.category
+            }
         })
 
     } catch (err) {

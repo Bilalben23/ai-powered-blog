@@ -1,28 +1,19 @@
 import { assets } from '@constants/assets';
-import { blogData } from '@constants/blogData';
-import { useState } from 'react';
 import BlogTable from '@components/admin/BlogTable';
-
+import useDashboardStats from '@hooks/useDashboardStats';
 
 export default function AdminDashboard() {
+    const { data, isLoading, isError, error } = useDashboardStats();
+    const recentBlogs = data?.latestBlogs;
+    const totalBlogs = data?.totalBlogs;
+    const totalComments = data?.totalComments;
+    const totalDrafts = data?.totalDrafts;
 
-    const [dashboardData, setDashboardData] = useState({
-        "blogs": 10,
-        "comments": 5,
-        "drafts": 0,
-        "recentBlogs": blogData.slice(0, 5)
-    })
 
-    const recentBlogs = blogData.slice(1, 7);
 
     const handleToggleBlogPublish = (id: string) => {
         // TODO: Implement a PATCH request to the backend to toggle publish status
         console.log(`🔄 Toggling publish status for blog with ID: ${id}`);
-    }
-
-    const handleDeleteBlogPost = (id: string) => {
-        // TODO: Implement a DELETE request to the backend to delete the blog post
-        console.log(`🗑️ Sending delete request for blog with ID: ${id}`);
     }
 
     return (
@@ -35,7 +26,11 @@ export default function AdminDashboard() {
                         className='size-12 md:size-16'
                     />
                     <div>
-                        <p className='text-lg font-semibold md:text-xl'>{dashboardData.blogs}</p>
+                        {
+                            isLoading
+                                ? <p className='w-8 h-5 bg-gray-300 rounded-lg animate-pulse'></p>
+                                : <p className='text-lg font-semibold md:text-xl'>{totalBlogs}</p>
+                        }
                         <p className='font-light text-gray-500'>Blogs</p>
                     </div>
                 </div>
@@ -46,7 +41,11 @@ export default function AdminDashboard() {
                         className='size-12 md:size-16'
                     />
                     <div>
-                        <p className='text-lg font-semibold md:text-xl'>{dashboardData.comments}</p>
+                        {
+                            isLoading
+                                ? <p className='w-8 h-5 bg-gray-300 rounded-lg animate-pulse'></p>
+                                : <p className='text-lg font-semibold md:text-xl'>{totalComments}</p>
+                        }
                         <p className='font-light text-gray-500'>Comments</p>
                     </div>
                 </div>
@@ -57,7 +56,11 @@ export default function AdminDashboard() {
                         className='size-12 md:size-16'
                     />
                     <div>
-                        <p className='text-lg font-semibold md:text-xl'>{dashboardData.drafts}</p>
+                        {
+                            isLoading
+                                ? <p className='w-8 h-5 bg-gray-300 rounded-lg animate-pulse'></p>
+                                : <p className='text-lg font-semibold md:text-xl'>{totalDrafts}</p>
+                        }
                         <p className='font-light text-gray-500'>Drafts</p>
                     </div>
                 </div>
@@ -74,8 +77,10 @@ export default function AdminDashboard() {
 
                 <BlogTable
                     blogs={recentBlogs}
+                    isLoading={isLoading}
+                    isError={isError}
+                    error={error?.message}
                     onTogglePublish={handleToggleBlogPublish}
-                    onDelete={handleDeleteBlogPost}
                 />
             </div>
         </section>

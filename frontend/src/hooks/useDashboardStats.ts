@@ -9,6 +9,8 @@ const blogSchema = z.object({
     createdAt: z.string()
 })
 
+export type Blog = z.infer<typeof blogSchema>;
+
 const dashboardStatsSchema = z.object({
     success: z.boolean(),
     message: z.string(),
