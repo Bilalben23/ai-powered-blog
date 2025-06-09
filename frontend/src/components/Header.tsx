@@ -72,13 +72,13 @@ export default function Header({ classes = "" }: { classes?: string }) {
                             aria-haspopup="true"
                             aria-expanded={menuOpen}
                             aria-controls="profile-menu"
-                            className="flex items-center px-2 py-1 font-medium transition cursor-pointer gap-x-2 hover:opacity-90"
+                            className="flex items-center px-2 py-1 font-medium transition cursor-pointer gap-x-1 md:gap-x-2 hover:opacity-90"
                             type="button"
                         >
                             <img
                                 alt={`Profile picture of ${user?.name ?? "user"}`}
                                 src={assets.user_icon}
-                                className="relative inline-block object-cover object-center w-10 h-10 rounded-full cursor-pointer"
+                                className="rounded-full size-8 md:size-10"
                             />
                             <p className="text-sm">{user?.name}</p>
                         </button>
