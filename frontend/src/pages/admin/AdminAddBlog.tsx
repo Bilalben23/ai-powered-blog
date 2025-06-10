@@ -7,6 +7,8 @@ import Quill from 'quill';
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { blogSchema, type BlogFormInputs } from '@validations/blogSchema';
+import useCreateBlog from '@hooks/useCreateBlog';
+import toast from 'react-hot-toast';
 
 
 export default function AdminAddBlog() {
@@ -16,18 +18,20 @@ export default function AdminAddBlog() {
         setValue,
         register,
         getValues,
+        reset,
         formState: { errors }
     } = useForm<BlogFormInputs>({
         resolver: zodResolver(blogSchema),
         defaultValues: {
             thumbnail: undefined,
             title: "",
-            subtitle: "",
+            subTitle: "",
+            description: "",
             category: "startup",
-            isPublished: false,
-            description: ""
+            isPublished: false
         }
     });
+    const { mutate: createBlog, isPending } = useCreateBlog();
 
     const editorRef = useRef<HTMLDivElement | null>(null);
     const quillRef = useRef<Quill | null>(null);
@@ -35,9 +39,16 @@ export default function AdminAddBlog() {
 
 
     const onSubmit = () => {
-        console.log("Submit log:", getValues());
-
-        // TODO: Call your post API here
+        createBlog(getValues(), {
+            onSuccess: () => {
+                toast.success("Blog created successfully!");
+                reset()
+            },
+            onError: (err) => {
+                console.log(err);
+                toast.error("Failed to create blog. Please try again.");
+            }
+        })
     }
 
     const generateContentWithAI = () => {
@@ -124,16 +135,16 @@ export default function AdminAddBlog() {
                 </div>
 
                 <div className='flex flex-col gap-y-2'>
-                    <label htmlFor="subtitle">Sub title</label>
+                    <label htmlFor="subTitle">Sub title</label>
                     <input
                         type="text"
-                        id='subtitle'
+                        id='subTitle'
                         placeholder='Type here...'
-                        className={`w-full max-w-xl p-2.5 border-2 rounded outline-none ${errors.subtitle ? "border-red-500" : "border-gray-300"}`}
-                        {...register("subtitle")}
+                        className={`w-full max-w-xl p-2.5 border-2 rounded outline-none ${errors.subTitle ? "border-red-500" : "border-gray-300"}`}
+                        {...register("subTitle")}
                     />
-                    {errors.subtitle && (
-                        <p className="text-sm font-light text-red-500">{errors.subtitle.message}</p>
+                    {errors.subTitle && (
+                        <p className="text-sm font-light text-red-500">{errors.subTitle.message}</p>
                     )}
                 </div>
 
@@ -204,9 +215,10 @@ export default function AdminAddBlog() {
                         whileHover={{ scale: 1.03, boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" }}
                         whileTap={{ scale: 0.97 }}
                         transition={{ type: "spring", stiffness: 300 }}
-                        className="px-9 shadow transition py-2.5 cursor-pointer text-white rounded bg-primary"
+                        className="px-9 shadow transition py-2.5 cursor-pointer text-white rounded bg-primary disabled:opacity-75"
+                        disabled={isPending}
                     >
-                        Add Blog
+                        {isPending ? "Adding Blog..." : "Add Blog"}
                     </motion.button>
 
                 </div>

@@ -8,9 +8,9 @@ export const blogSchema = z.object({
     title: z.string()
         .trim()
         .min(3, "Title must be at least 3 characters"),
-    subtitle: z.string()
+    subTitle: z.string()
         .trim()
-        .min(3, "Subtitle must be at least 3 characters"),
+        .min(3, "SubTitle must be at least 3 characters"),
     category: z.enum(blogCategories, {
         message: `Category must be one of these: ${blogCategories.join(" | ")}`
     }),

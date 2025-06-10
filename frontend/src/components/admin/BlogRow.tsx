@@ -60,10 +60,7 @@ const BlogRow: FC<BlogRowProps> = ({ index, blogId, title, createdAt, isPublishe
                     className="px-3 py-1.5 transition disabled:opacity-90 hover:opacity-96 hover:scale-102 text-gray-600 border-2 border-gray-400 rounded cursor-pointer"
                     onClick={() => handleToggle(blogId)}
                 >
-                    {!isPublished
-                        ? isTogglePending ? "Publishing..." : "Publish"
-                        : isTogglePending ? "Unpublishing..." : "Unpublish"
-                    }
+                    {!isPublished ? "Publish" : "Unpublish"}
                 </button>
                 <button
                     type="button"

@@ -12,11 +12,17 @@ export const createBlogSchema = z.object({
     description: z.string({
         required_error: "Description is required"
     }).min(10, "Description must be at least 10 characters"),
-    category: z.enum(blogCategories as [string, ...string[]], {
+    category: z.enum(blogCategories, {
         required_error: "Category is required",
         message: `Category must be one of these: ${blogCategories.join(" | ")}`
     }),
-    isPublished: z.coerce.boolean().optional()
+    isPublished: z.union([
+        z.boolean(),
+        z.literal("true").transform(() => true),
+        z.literal("false").transform(() => false),
+    ])
+        .catch(false)
+        .default(false)
 });
 
 export const updateBlogSchema = createBlogSchema.partial();

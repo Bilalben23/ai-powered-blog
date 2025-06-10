@@ -170,6 +170,7 @@ export const getBlogById = async (req: Request<{ id: string }>, res: Response) =
 
 
 export const createBlog = async (req: Request<{}, {}, CreateBlogInput>, res: Response) => {
+    console.log(req.body);
     try {
         const authorId = (req.user as { _id: string })._id.toString();
         const imageFile = req.file;
@@ -202,7 +203,10 @@ export const createBlog = async (req: Request<{}, {}, CreateBlogInput>, res: Res
         res.status(201).json({
             success: true,
             message: "Blog created successfully",
-            data: blog
+            data: {
+                _id: blog._id,
+                category: blog.category
+            }
         })
 
     } catch (err) {
