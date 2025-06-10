@@ -14,7 +14,7 @@ export default function BlogList() {
     const queryClient = useQueryClient();
 
     const initialCategory = (searchParams.get("category") as BlogCategoryFilter) || "all";
-    const initialPage = parseInt(searchParams.get("page") || "1", 10);
+    const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
 
     const [category, setCategory] = useState<BlogCategoryFilter>(initialCategory);
     const [page, setPage] = useState<number>(initialPage);
