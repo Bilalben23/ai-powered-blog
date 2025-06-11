@@ -18,6 +18,7 @@ export default function AdminBlogList() {
     const blogs = data?.blogs;
     const pagination = data?.pagination;
 
+
     useEffect(() => {
         setSearchParams({ page: String(page) });
     }, [page]);
@@ -41,9 +42,10 @@ export default function AdminBlogList() {
                 isError={isError}
                 error={error?.message}
             />
+
             {/* Pagination */}
             {pagination && pagination.totalPages > 1 && (
-                <div className='mt-10 flex justify-center items-center gap-2 flex-wrap'>
+                <div className='mt-10 flex justify-center items-center md:max-w-5xl max-w-full gap-2 flex-wrap'>
                     {Array.from({ length: pagination.totalPages }).map((_, i) => {
                         const pageNum = i + 1;
                         return (

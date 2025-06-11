@@ -19,6 +19,9 @@ const BlogRow: FC<BlogRowProps> = ({ index, blogId, title, createdAt, isPublishe
     const { mutate: toggleBlog, isPending: isTogglePending } = useTogglePublish();
 
     const handleDelete = (id: string) => {
+        const confirmDelete = confirm("Are you sure you want to delete this blog post?");
+        if (!confirmDelete) return;
+
         deleteBlog(id, {
             onSuccess: () => {
                 toast.success("Blog post deleted successfully.");

@@ -1,22 +1,42 @@
-import { commentsData } from '@constants/commentsData'
-import { formatDateReadable } from '@utils/formatDate';
-import { CheckCircle, Trash2, XCircle } from "lucide-react";
-import { useState } from 'react';
-import { motion } from 'motion/react';
+import { CheckCircle, XCircle } from "lucide-react";
+import { useEffect, useState } from 'react';
+import CommentRow from '@components/admin/CommentRow';
+import useAdminComments, { fetchAdminComments } from '@hooks/useAdminComments';
+import { useSearchParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import useAxios from "@hooks/useAxios";
 
 
 export default function AdminComments() {
+    const queryClient = useQueryClient();
+    const axios = useAxios();
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+    const [page, setPage] = useState<number>(initialPage);
+
     const [isApproved, setIsApproved] = useState(true);
 
-    const handleApprovedComment = (id: string) => {
-        // TODO: Send PATCH request to backend to approve or disapprove the comment
-        console.log(`✅ Toggling approval status for comment with ID: ${id}`);
-    }
+    const { data, isLoading, isError, error, isPlaceholderData } = useAdminComments({ isApproved, page });
+    const comments = data?.comments;
+    const pagination = data?.pagination;
 
-    const handleDeleteComment = (id: string) => {
-        // TODO: Send DELETE request to backend to permanently remove the comment
-        console.log(`🗑️ Deleting comment with ID: ${id}`);
-    }
+
+
+    useEffect(() => {
+        if (!isPlaceholderData && pagination && pagination.hasNextPage) {
+            queryClient.prefetchQuery({
+                queryKey: ["adminComments", isApproved, page + 1],
+                queryFn: () => fetchAdminComments(axios, { isApproved, page: page + 1 })
+            })
+        }
+    }, [queryClient, pagination?.hasNextPage, isPlaceholderData, page])
+
+
+    useEffect(() => {
+        setSearchParams({ page: String(page), isApproved: String(isApproved) });
+    }, [page, isApproved])
+
 
     return (
         <section className='flex-1 w-full p-3 sm:p-6 md:p-10'>
@@ -69,75 +89,46 @@ export default function AdminComments() {
                     </thead>
                     <tbody>
                         {
-
-                            commentsData.map(comment => (
-                                <tr
-                                    key={comment._id}
-                                    className="font-light border-b border-gray-200 last:*:pb-12"
-                                >
-                                    <td className="p-4">
-                                        <p className='mb-4 text-gray-700 line-clamp-2'>
-                                            <span className='font-medium'>Blog: </span>
-                                            {comment.blog.title}
-                                        </p>
-                                        <p className='text-gray-700'>
-                                            <span className='font-medium'>Name: </span>
-                                            Michael Scott
-                                        </p>
-                                        <p className='text-gray-700'>
-                                            <span className='font-medium'>Comment:</span>
-                                            {comment.content}
-                                        </p>
-                                    </td>
-                                    <td className='p-4 text-gray-700'>
-                                        {formatDateReadable(comment.createdAt)}
-                                    </td>
-                                    <td className='p-4'>
-                                        <div className='flex items-center justify-end gap-x-2'>
-                                            {
-                                                comment.isApproved
-                                                    ? <motion.button
-                                                        type="button"
-                                                        onClick={() => handleApprovedComment(comment._id)}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        className="p-1 rounded-full cursor-pointer"
-                                                    >
-                                                        <motion.div
-                                                            initial={{ stroke: "#22c55e" }}
-                                                            whileTap={{ stroke: "#16a34a" }}
-                                                            transition={{ duration: 0.3, ease: "easeInOut" }}
-                                                            style={{ display: "inline-block" }}
-                                                        >
-                                                            <CheckCircle size={24} className='text-green-600' />
-                                                        </motion.div>
-                                                    </motion.button>
-                                                    : <p className='px-3 py-1 text-xs text-green-600 bg-green-100 border border-green-600 rounded-full'>Approved</p>
-                                            }
-                                            <motion.button
-                                                type="button"
-                                                onClick={() => handleDeleteComment(comment._id)}
-                                                whileHover={{ scale: 1.1, rotate: -5 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                transition={{ type: "spring", stiffness: 300 }}
-                                                className="p-1 rounded-full cursor-pointer"
-                                            >
-                                                <motion.div
-                                                    initial={{ color: "#4B5563" }}
-                                                    whileHover={{ color: "#EF4444" }}
-                                                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                                                    style={{ display: "inline-block" }}
-                                                >
-                                                    <Trash2 className="size-6" />
-                                                </motion.div>
-                                            </motion.button>
-                                        </div>
+                            isLoading ?
+                                <tr>
+                                    <td colSpan={3} className="p-4 text-center text-gray-500">
+                                        Loading...
                                     </td>
                                 </tr>
-                            ))
+                                : comments?.map(comment => (
+                                    <CommentRow
+                                        key={comment._id}
+                                        comment={comment}
+                                    />
+                                ))
                         }
                     </tbody>
                 </table>
-            </div >
-        </section >
+            </div>
+
+            {/* Pagination */}
+            {pagination && pagination.totalPages > 1 && (
+                <div className='mt-10 flex justify-center items-center md:max-w-5xl max-w-full gap-2 flex-wrap'>
+                    {Array.from({ length: pagination.totalPages }).map((_, i) => {
+                        const pageNum = i + 1;
+                        return (
+                            <button
+                                key={pageNum}
+                                type='button'
+                                onClick={() => setPage(pageNum)}
+                                disabled={isLoading || pageNum === page}
+                                className={`size-10 rounded-full flex items-center cursor-pointer justify-center border text-sm font-medium transition ${pageNum === page
+                                    ? 'bg-primary text-white'
+                                    : 'hover:bg-gray-100 text-gray-600'
+                                    }`}
+                            >
+                                {pageNum}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+
+        </section>
     )
 }

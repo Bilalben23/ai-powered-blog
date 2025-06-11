@@ -5,7 +5,6 @@ import { Request, Response } from "express-serve-static-core";
 
 
 export const getAllComments = async (req: Request<{}, {}, {}, { isApproved?: string, page?: number, limit?: number }>, res: Response) => {
-
     const limit = Number(req.query.limit) || 10;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
@@ -19,8 +18,9 @@ export const getAllComments = async (req: Request<{}, {}, {}, { isApproved?: str
     }
 
     try {
-
         const comments = await Comment.find(filter)
+            .select("-updatedAt -__v")
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .populate("blog", "title")
@@ -31,6 +31,7 @@ export const getAllComments = async (req: Request<{}, {}, {}, { isApproved?: str
 
         res.status(200).json({
             success: true,
+            message: "Comments fetched successfully",
             data: comments,
             pagination: {
                 currentPage: page,

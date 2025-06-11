@@ -42,7 +42,8 @@ export default function AdminAddBlog() {
         createBlog(getValues(), {
             onSuccess: () => {
                 toast.success("Blog created successfully!");
-                reset()
+                reset();
+                quillRef.current?.setContents?.([]);
             },
             onError: (err) => {
                 console.log(err);
