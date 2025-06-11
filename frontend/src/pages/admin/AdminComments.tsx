@@ -13,15 +13,16 @@ export default function AdminComments() {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
-    const [page, setPage] = useState<number>(initialPage);
+    const initialIsApproved = searchParams.get("isApproved") === "false" ? false : true;
 
-    const [isApproved, setIsApproved] = useState(true);
+    const [page, setPage] = useState<number>(initialPage);
+    const [isApproved, setIsApproved] = useState<boolean>(initialIsApproved);
 
     const { data, isLoading, isError, error, isPlaceholderData } = useAdminComments({ isApproved, page });
     const comments = data?.comments;
     const pagination = data?.pagination;
 
-
+    console.log(comments);
 
     useEffect(() => {
         if (!isPlaceholderData && pagination && pagination.hasNextPage) {
