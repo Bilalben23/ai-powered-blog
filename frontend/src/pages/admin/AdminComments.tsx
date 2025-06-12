@@ -5,6 +5,8 @@ import useAdminComments, { fetchAdminComments } from '@hooks/useAdminComments';
 import { useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import useAxios from "@hooks/useAxios";
+import CommentTableSkeleton from "@components/skeletons/CommentTableSkeleton";
+import ErrorMessage from "@components/ErrorMessage";
 
 
 export default function AdminComments() {
@@ -50,6 +52,7 @@ export default function AdminComments() {
                     <button
                         type="button"
                         onClick={() => setIsApproved(true)}
+                        disabled={isLoading}
                         className={`flex items-center gap-2 cursor-pointer px-4 py-1.5 text-xs border rounded-full shadow transition-all duration-200 ${isApproved
                             ? "bg-primary/10 text-primary border-primary"
                             : "text-gray-600 bg-white border-gray-300"
@@ -62,6 +65,7 @@ export default function AdminComments() {
                     <button
                         type="button"
                         onClick={() => setIsApproved(false)}
+                        disabled={isLoading}
                         className={`flex items-center gap-2 px-4 py-1.5 text-xs border rounded-full shadow transition-all cursor-pointer duration-200 ${isApproved
                             ? "text-gray-600 bg-white border-gray-300"
                             : "bg-red-100 text-red-600 border-red-400"
@@ -92,18 +96,23 @@ export default function AdminComments() {
                     </thead>
                     <tbody>
                         {
-                            isLoading ?
-                                <tr>
-                                    <td colSpan={3} className="p-4 text-center text-gray-500">
-                                        Loading...
+                            !isError ?
+                                isLoading ?
+                                    <CommentTableSkeleton />
+                                    : comments?.map(comment => (
+                                        <CommentRow
+                                            key={comment._id}
+                                            comment={comment}
+                                        />
+                                    ))
+                                : <tr>
+                                    <td colSpan={3} className="px-4 py-6 text-center text-red-600">
+                                        <ErrorMessage
+                                            title="Failed to load comments data"
+                                            message={error.message}
+                                        />
                                     </td>
                                 </tr>
-                                : comments?.map(comment => (
-                                    <CommentRow
-                                        key={comment._id}
-                                        comment={comment}
-                                    />
-                                ))
                         }
                     </tbody>
                 </table>

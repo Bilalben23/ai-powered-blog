@@ -1,7 +1,7 @@
-const BlogTableSkeleton = () => {
+const BlogTableSkeleton = ({ rowsNumber = 6 }) => {
     return (
         <>
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: rowsNumber }).map((_, i) => (
                 <tr key={i} className="animate-pulse border-b border-gray-200">
                     <td className="pl-5 py-4">
                         <div className="size-4 bg-gray-200 rounded" />

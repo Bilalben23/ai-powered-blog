@@ -41,6 +41,7 @@ export default function AdminBlogList() {
                 isLoading={isLoading}
                 isError={isError}
                 error={error?.message}
+                skeletonRowsNumber={10}
             />
 
             {/* Pagination */}

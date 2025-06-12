@@ -9,11 +9,12 @@ type BlogTableProps = {
     blogs?: Blog[];
     isLoading: boolean;
     isError: boolean;
-    error?: string
+    error?: string;
+    skeletonRowsNumber?: number
 }
 
 
-const BlogTable: FC<BlogTableProps> = ({ blogs = [], isLoading, isError, error }) => {
+const BlogTable: FC<BlogTableProps> = ({ blogs = [], isLoading, isError, error, skeletonRowsNumber = 6 }) => {
     return (
         <div className="relative max-w-full mt-5 overflow-x-auto bg-white rounded-lg shadow md:max-w-5xl">
             <table className="w-full text-left">
@@ -38,9 +39,9 @@ const BlogTable: FC<BlogTableProps> = ({ blogs = [], isLoading, isError, error }
                 </thead>
                 <tbody>
                     {
-                        isError ?
+                        !isError ?
                             isLoading
-                                ? <BlogTableSkeleton />
+                                ? <BlogTableSkeleton rowsNumber={skeletonRowsNumber} />
                                 : blogs.map((blog, index) => <BlogRow
                                     key={blog._id}
                                     index={index + 1}
