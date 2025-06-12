@@ -1,6 +1,8 @@
 import { type FC } from "react";
 import type { Blog } from "@hooks/useDashboardStats";
 import BlogRow from "./BlogRow";
+import BlogTableSkeleton from "@components/skeletons/BlogTableSkeleton";
+import ErrorMessage from "@components/ErrorMessage";
 
 
 type BlogTableProps = {
@@ -35,15 +37,28 @@ const BlogTable: FC<BlogTableProps> = ({ blogs = [], isLoading, isError, error }
                     </tr>
                 </thead>
                 <tbody>
-                    {blogs.map((blog, index) => <BlogRow
-                        key={blog._id}
-                        index={index + 1}
-                        blogId={blog._id}
-                        title={blog.title}
-                        isPublished={blog.isPublished}
-                        createdAt={blog.createdAt}
-                    />
-                    )}
+                    {
+                        isError ?
+                            isLoading
+                                ? <BlogTableSkeleton />
+                                : blogs.map((blog, index) => <BlogRow
+                                    key={blog._id}
+                                    index={index + 1}
+                                    blogId={blog._id}
+                                    title={blog.title}
+                                    isPublished={blog.isPublished}
+                                    createdAt={blog.createdAt}
+                                />
+                                )
+                            : <tr>
+                                <td colSpan={5} className="px-4 py-6 text-center text-red-600">
+                                    <ErrorMessage
+                                        title="Failed to load blog data"
+                                        message={error}
+                                    />
+                                </td>
+                            </tr>
+                    }
                 </tbody>
             </table>
         </div>
