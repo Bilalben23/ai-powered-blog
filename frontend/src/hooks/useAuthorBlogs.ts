@@ -45,7 +45,6 @@ export async function fetchAuthorBlogs(axiosInstance: AxiosInstance, page = 1) {
 
 export default function useAuthorBlogs(page = 1) {
     const axios = useAxios();
-
     return useQuery({
         queryKey: ["authorBlogs", page],
         queryFn: () => fetchAuthorBlogs(axios, page),

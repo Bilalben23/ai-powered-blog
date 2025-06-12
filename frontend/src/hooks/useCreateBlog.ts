@@ -48,6 +48,7 @@ export default function useCreateBlog() {
             queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
             queryClient.invalidateQueries({ queryKey: ["blogs", "all"], exact: false });
             queryClient.invalidateQueries({ queryKey: ["blogs", data.data.category], exact: false });
+            queryClient.invalidateQueries({ queryKey: ["authorBlogs"], exact: false });
         }
     })
 }

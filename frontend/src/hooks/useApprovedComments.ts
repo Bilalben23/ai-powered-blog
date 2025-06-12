@@ -22,7 +22,7 @@ export default function useApprovedComments(blogId?: string) {
     return useQuery({
         queryKey: ["approvedComments", blogId],
         queryFn: async () => {
-            const { data } = await axiosInstance(`/v1/comments/blog/${blogId}`);
+            const { data } = await axiosInstance.get(`/v1/comments/blog/${blogId}`);
 
             const parsed = approvedCommentsResponseSchema.safeParse(data);
             if (!parsed.success) {

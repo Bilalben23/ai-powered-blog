@@ -24,6 +24,7 @@ export default function AdminComments() {
 
     console.log(comments);
 
+
     useEffect(() => {
         if (!isPlaceholderData && pagination && pagination.hasNextPage) {
             queryClient.prefetchQuery({

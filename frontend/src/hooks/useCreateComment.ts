@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "@utils/axiosInstance";
 import { z } from "zod";
 
@@ -13,6 +13,8 @@ type CreateCommentInput = {
 }
 
 export default function useCreateComment(blogId?: string) {
+    const queryClient = useQueryClient();
+
     return useMutation({
         mutationKey: ["createComment", blogId],
         mutationFn: async (commentData: CreateCommentInput) => {
@@ -28,6 +30,9 @@ export default function useCreateComment(blogId?: string) {
 
             return parsed.data
         },
-
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+            queryClient.invalidateQueries({ queryKey: ["adminComments"], exact: false })
+        }
     })
 }

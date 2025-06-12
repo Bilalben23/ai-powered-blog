@@ -43,7 +43,7 @@ const CommentRow: FC<CommentRowProps> = ({ comment }) => {
             <td className='p-4'>
                 <div className='flex items-center justify-end gap-x-2'>
                     {
-                        comment.isApproved ? (
+                        !comment.isApproved ? (
                             <motion.button
                                 type="button"
                                 whileTap={{ scale: 0.9 }}

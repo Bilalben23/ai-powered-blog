@@ -20,9 +20,7 @@ export default function BlogPage() {
         register,
         handleSubmit,
         getValues,
-        formState: {
-            errors
-        },
+        formState: { errors },
         reset
     } = useForm({
         resolver: zodResolver(createCommentSchema),
@@ -65,7 +63,6 @@ export default function BlogPage() {
         })
     }
 
-
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [])
@@ -84,7 +81,6 @@ export default function BlogPage() {
     if (isBlogLoading) {
         return <BlogDetailsSkeleton />
     }
-
 
     return (
         <>

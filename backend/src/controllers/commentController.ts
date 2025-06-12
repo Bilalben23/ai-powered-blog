@@ -125,7 +125,6 @@ export const createComment = async (req: Request<{ blogId: string }, {}, CreateC
 
 
 export const approveComment = async (req: Request<{ id: string }>, res: Response) => {
-
     const commentId = req.params.id;
     const userId = (req.user as { _id: string })._id.toString();
 
@@ -166,7 +165,10 @@ export const approveComment = async (req: Request<{ id: string }>, res: Response
         res.status(200).json({
             success: true,
             message: "Comment approved successfully",
-            data: comment
+            data: {
+                commentId: comment._id,
+                blogId: blog._id
+            }
         })
 
     } catch (err) {
