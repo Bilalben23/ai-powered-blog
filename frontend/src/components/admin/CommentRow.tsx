@@ -3,6 +3,8 @@ import { CheckCircle, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import type { Comment } from '@hooks/useAdminComments';
+import useApproveComment from '@hooks/useApproveComment';
+import toast from 'react-hot-toast';
 
 
 interface CommentRowProps {
@@ -11,14 +13,23 @@ interface CommentRowProps {
 
 const CommentRow: FC<CommentRowProps> = ({ comment }) => {
 
-    const handleDelete = (id: string) => {
+    const { mutate: approveComment, isPending: isApproveCommentPending } = useApproveComment();
+
+    const handleCommentDelete = (id: string) => {
         const confirmDelete = confirm("Are you sure you want to delete this comment?");
         if (!confirmDelete) return;
 
     }
 
-    const handleApprove = (id: string) => {
-
+    const handleCommentApprove = (id: string) => {
+        approveComment(id, {
+            onSuccess: () => {
+                toast.success("Comment approved successfully.");
+            },
+            onError: () => {
+                toast.error("Failed to approve the comment. Please try again.");
+            }
+        })
     }
 
 
@@ -47,8 +58,9 @@ const CommentRow: FC<CommentRowProps> = ({ comment }) => {
                             <motion.button
                                 type="button"
                                 whileTap={{ scale: 0.9 }}
-                                onClick={() => handleApprove(comment._id)}
+                                onClick={() => handleCommentApprove(comment._id)}
                                 className="p-1 rounded-full cursor-pointer"
+                                disabled={isApproveCommentPending}
                             >
                                 <motion.div
                                     initial={{ stroke: "#22c55e" }}
@@ -71,7 +83,7 @@ const CommentRow: FC<CommentRowProps> = ({ comment }) => {
                         whileTap={{ scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 300 }}
                         className="p-1 rounded-full cursor-pointer"
-                        onClick={() => handleDelete(comment._id)}
+                        onClick={() => handleCommentDelete(comment._id)}
                     >
                         <motion.div
                             initial={{ color: "#4B5563" }}

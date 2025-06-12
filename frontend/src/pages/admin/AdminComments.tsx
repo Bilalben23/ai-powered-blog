@@ -22,9 +22,6 @@ export default function AdminComments() {
     const comments = data?.comments;
     const pagination = data?.pagination;
 
-    console.log(comments);
-
-
     useEffect(() => {
         if (!isPlaceholderData && pagination && pagination.hasNextPage) {
             queryClient.prefetchQuery({
@@ -32,12 +29,16 @@ export default function AdminComments() {
                 queryFn: () => fetchAdminComments(axios, { isApproved, page: page + 1 })
             })
         }
-    }, [queryClient, pagination?.hasNextPage, isPlaceholderData, page])
+    }, [queryClient, pagination?.hasNextPage, isPlaceholderData, page]);
 
 
     useEffect(() => {
+        setPage(1);
+    }, [isApproved]);
+
+    useEffect(() => {
         setSearchParams({ page: String(page), isApproved: String(isApproved) });
-    }, [page, isApproved])
+    }, [page, isApproved]);
 
 
     return (
