@@ -5,6 +5,7 @@ import type { FC } from 'react';
 import type { Comment } from '@hooks/useAdminComments';
 import useApproveComment from '@hooks/useApproveComment';
 import toast from 'react-hot-toast';
+import useDeleteComment from '@hooks/useDeleteComment';
 
 
 interface CommentRowProps {
@@ -14,11 +15,19 @@ interface CommentRowProps {
 const CommentRow: FC<CommentRowProps> = ({ comment }) => {
 
     const { mutate: approveComment, isPending: isApproveCommentPending } = useApproveComment();
+    const { mutate: deleteComment, isPending: isDeleteCommentPending } = useDeleteComment();
 
     const handleCommentDelete = (id: string) => {
         const confirmDelete = confirm("Are you sure you want to delete this comment?");
         if (!confirmDelete) return;
-
+        deleteComment(id, {
+            onSuccess: () => {
+                toast.success("Comment deleted successfully.");
+            },
+            onError: () => {
+                toast.error("Failed to delete the comment. Please try again.");
+            }
+        });
     }
 
     const handleCommentApprove = (id: string) => {
@@ -83,6 +92,7 @@ const CommentRow: FC<CommentRowProps> = ({ comment }) => {
                         whileTap={{ scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 300 }}
                         className="p-1 rounded-full cursor-pointer"
+                        disabled={isDeleteCommentPending}
                         onClick={() => handleCommentDelete(comment._id)}
                     >
                         <motion.div

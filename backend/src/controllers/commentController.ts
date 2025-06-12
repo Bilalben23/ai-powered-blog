@@ -203,13 +203,13 @@ export const deleteComment = async (req: Request<{ id: string }>, res: Response)
         // Check if the authenticated user is the blog's author
         if (comment.blog.author.toString() !== userId) {
             res.status(403).json({
-                success: true,
+                success: false,
                 message: "You are not authorized to delete this comment"
             })
             return;
         }
 
-        await Comment.deleteOne();
+        await Comment.deleteOne({ _id: commentId });
 
         res.status(200).json({
             success: true,
@@ -218,7 +218,7 @@ export const deleteComment = async (req: Request<{ id: string }>, res: Response)
                 _id: comment._id,
                 blogId: comment.blog._id,
                 isApproved: comment.isApproved
-            },
+            }
         })
 
     } catch (err) {

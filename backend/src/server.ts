@@ -33,7 +33,7 @@ app.use("/api/v1/comments", commentsRoutes);
 app.use("/api/v1/newsletter", newsletterRoutes);
 
 
-app.listen(ENV_VARS.PORT, () => {
+app.listen(ENV_VARS.PORT, "0.0.0.0", () => {
     console.log(`✅ App is running on http://localhost:${ENV_VARS.PORT}`);
     connectDB();
 })
