@@ -190,7 +190,7 @@ export const deleteComment = async (req: Request<{ id: string }>, res: Response)
 
         // find comment and populate blog's author
         const comment = await Comment.findById(commentId)
-            .populate<{ blog: { author: string } }>("blog", "author");
+            .populate<{ blog: { author: string; _id: string } }>('blog', 'author');
 
         if (!comment) {
             res.status(404).json({
@@ -200,6 +200,7 @@ export const deleteComment = async (req: Request<{ id: string }>, res: Response)
             return;
         }
 
+        // Check if the authenticated user is the blog's author
         if (comment.blog.author.toString() !== userId) {
             res.status(403).json({
                 success: true,
@@ -208,12 +209,16 @@ export const deleteComment = async (req: Request<{ id: string }>, res: Response)
             return;
         }
 
-        const deletedComment = await Comment.findByIdAndDelete(commentId);
+        await Comment.deleteOne();
 
         res.status(200).json({
             success: true,
-            data: deletedComment,
-            message: "Comment deleted successfully"
+            message: "Comment deleted successfully",
+            data: {
+                _id: comment._id,
+                blogId: comment.blog._id,
+                isApproved: comment.isApproved
+            },
         })
 
     } catch (err) {
