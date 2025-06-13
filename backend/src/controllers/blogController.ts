@@ -223,12 +223,22 @@ export const generateDescription = async (req: Request<{}, {}, { prompt: string 
     const { prompt } = req.body;
 
     try {
-        const description = await generateBlogDescription(`generate a blog content for this topic: ${prompt} in simple text format`);
+        const rawResponse = await generateBlogDescription(`generate a blog content for this topic: ${prompt} in simple text format`);
+        let description = "";
+
+        if (
+            rawResponse &&
+            typeof rawResponse === "object" &&
+            "parts" in rawResponse &&
+            Array.isArray((rawResponse as any).parts)
+        ) {
+            description = (rawResponse as any).parts?.[0]?.text || "";
+        }
 
         res.status(200).json({
             success: true,
             message: "Blog description generated successfully",
-            data: description
+            data: { description }
         })
 
     } catch (err) {
