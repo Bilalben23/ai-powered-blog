@@ -170,7 +170,6 @@ export const getBlogById = async (req: Request<{ id: string }>, res: Response) =
 
 
 export const createBlog = async (req: Request<{}, {}, CreateBlogInput>, res: Response) => {
-    console.log(req.body);
     try {
         const authorId = (req.user as { _id: string })._id.toString();
         const imageFile = req.file;

@@ -9,6 +9,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { blogSchema, type BlogFormInputs } from '@validations/blogSchema';
 import useCreateBlog from '@hooks/useCreateBlog';
 import toast from 'react-hot-toast';
+import useGenerateDescription from '@hooks/useGenerateDescription';
+import { parse } from "marked";
+import { ClipLoader } from "react-spinners";
 
 
 export default function AdminAddBlog() {
@@ -31,7 +34,9 @@ export default function AdminAddBlog() {
             isPublished: false
         }
     });
-    const { mutate: createBlog, isPending } = useCreateBlog();
+    const { mutate: createBlog, isPending: isCreateBlogPending } = useCreateBlog();
+    const { mutate: generateDescription, isPending: isGenerateDescriptionPending } = useGenerateDescription();
+
 
     const editorRef = useRef<HTMLDivElement | null>(null);
     const quillRef = useRef<Quill | null>(null);
@@ -52,10 +57,20 @@ export default function AdminAddBlog() {
         })
     }
 
-    const generateContentWithAI = () => {
-        // Future: Use AI API and inject into Quill
-    }
 
+    const generateContentWithAI = () => {
+        generateDescription(getValues("title"), {
+            onSuccess: async (data) => {
+                if (quillRef.current?.root && data.description) {
+                    quillRef.current.root.innerHTML = await parse(data.description);
+                }
+            },
+            onError: (err) => {
+                toast.error("Failed to generate description.");
+                console.error(err);
+            }
+        });
+    }
 
     useEffect(() => {
         if (editorRef.current && !quillRef.current) {
@@ -81,7 +96,6 @@ export default function AdminAddBlog() {
             URL.revokeObjectURL(objectUrl);
         }
     }, [thumbnail]);
-
 
 
     return (
@@ -158,9 +172,17 @@ export default function AdminAddBlog() {
 
                         <button
                             type="button"
-                            className='absolute flex items-center px-4 py-2 text-xs text-white transition rounded shadow cursor-pointer bg-black/75 hover:opacity-95 bottom-1 right-2 gap-x-2'
+                            disabled={isGenerateDescriptionPending || !watch("title")}
+                            className='absolute flex items-center px-4 py-2 text-xs text-white transition rounded shadow cursor-pointer bg-black/75 hover:opacity-95 bottom-1 right-2 gap-x-2 disabled:opacity-50'
                             onClick={generateContentWithAI}
-                        ><Pencil size={15} /> Generate with AI</button>
+                        >
+                            {
+                                isGenerateDescriptionPending ?
+                                    <ClipLoader size={15} />
+                                    : <Pencil size={15} />
+                            }
+                            {isGenerateDescriptionPending ? "Generating description..." : "Generate with AI"}
+                        </button>
                     </div>
                     {errors.description && (
                         <p className="text-sm font-light text-red-500">{errors.description.message}</p>
@@ -217,9 +239,9 @@ export default function AdminAddBlog() {
                         whileTap={{ scale: 0.97 }}
                         transition={{ type: "spring", stiffness: 300 }}
                         className="px-9 shadow transition py-2.5 cursor-pointer text-white rounded bg-primary disabled:opacity-75"
-                        disabled={isPending}
+                        disabled={isCreateBlogPending}
                     >
-                        {isPending ? "Adding Blog..." : "Add Blog"}
+                        {isCreateBlogPending ? "Adding Blog..." : "Add Blog"}
                     </motion.button>
 
                 </div>

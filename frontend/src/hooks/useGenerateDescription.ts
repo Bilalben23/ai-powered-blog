@@ -25,7 +25,7 @@ export default function useGenerateDescription() {
                 throw new Error('Invalid response format');
             }
 
-            return parsed.data.data.description;
+            return parsed.data.data;
         }
     })
 }

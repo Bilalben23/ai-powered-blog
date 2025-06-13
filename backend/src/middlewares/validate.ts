@@ -22,7 +22,6 @@ export const validate = (schema: ValidateOptions) =>
             if (schema.body) {
                 const result = schema.body.safeParse(req.body);
                 if (!result.success) {
-                    console.log(result.error.errors);
                     res.status(400).json({
                         success: false,
                         message: "Validation error",
