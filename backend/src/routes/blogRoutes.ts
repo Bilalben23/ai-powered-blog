@@ -2,7 +2,7 @@ import { Router } from "express";
 import * as BlogController from "@/controllers/blogController.ts";
 import { authenticateJWT } from "@/middlewares/authenticateJWT.ts";
 import { validate } from "@/middlewares/validate.ts";
-import { createBlogSchema, updateBlogSchema } from "@/validations/blogSchema.ts";
+import { createBlogSchema, generateDescriptionSchema, updateBlogSchema } from "@/validations/blogSchema.ts";
 import { upload } from "@/middlewares/multer.ts";
 
 const router = Router();
@@ -74,6 +74,17 @@ router.post(
 
 
 /**
+ * @route POST /api/v1/blogs/generate-description
+ * @desc Generate a blog description using AI based on prompt
+ * @access Private
+ */
+router.post(
+    "/generate-description",
+    authenticateJWT,
+    BlogController.generateDescription
+)
+
+/**
  * @route PATCH /api/v1/blogs/:id/published
  * @desc Toggle the `isPublished` status of a blog post (publish/unpublish)
  * @access Private (only the author can toggle)
@@ -82,6 +93,7 @@ router.post(
 router.patch(
     "/:id/publish",
     authenticateJWT,
+    validate({ body: generateDescriptionSchema }),
     BlogController.togglePublish
 );
 

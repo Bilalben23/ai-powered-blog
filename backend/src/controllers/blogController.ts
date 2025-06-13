@@ -3,6 +3,7 @@ import { Blog, type BlogCategory } from "@/models/blogModel.ts";
 import { type CreateBlogInput, type UpdateBlogInput } from "@/validations/blogSchema.ts";
 import { uploadImageAndGetOptimizedUrl } from "@/utils/uploadToImageKit.ts";
 import { Comment } from "@/models/commentModel.ts";
+import generateBlogDescription from "@/configs/gemini";
 type ExtendedCategory = BlogCategory | "all";
 
 
@@ -216,6 +217,29 @@ export const createBlog = async (req: Request<{}, {}, CreateBlogInput>, res: Res
         })
     }
 }
+
+
+export const generateDescription = async (req: Request<{}, {}, { prompt: string }>, res: Response) => {
+    const { prompt } = req.body;
+
+    try {
+        const description = await generateBlogDescription(`generate a blog content for this topic: ${prompt} in simple text format`);
+
+        res.status(200).json({
+            success: true,
+            message: "Blog description generated successfully",
+            data: description
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: err instanceof Error ? err.message : "Something went wrong"
+        })
+    }
+}
+
 
 
 export const togglePublish = async (req: Request<{ id: string }, {}, UpdateBlogInput>, res: Response) => {

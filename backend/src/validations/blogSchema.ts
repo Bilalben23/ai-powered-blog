@@ -25,6 +25,13 @@ export const createBlogSchema = z.object({
         .default(false)
 });
 
+export const generateDescriptionSchema = z.object({
+    prompt: z.string({ required_error: "Prompt text is required" })
+        .trim()
+        .min(10, "Prompt must be at least 10 characters"),
+});
+
+
 export const updateBlogSchema = createBlogSchema.partial();
 
 export type CreateBlogInput = z.infer<typeof createBlogSchema>;

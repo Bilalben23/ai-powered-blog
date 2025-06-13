@@ -10,5 +10,6 @@ export const ENV_VARS = {
     REFRESH_SECRET: process.env.REFRESH_SECRET || "refresh_secret",
     IMAGEKIT_PUBLIC_KEY: process.env.IMAGEKIT_PUBLIC_KEY || "",
     IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY || "",
-    IMAGEKIT_URL_ENDPOINT: process.env.IMAGEKIT_URL_ENDPOINT || ""
+    IMAGEKIT_URL_ENDPOINT: process.env.IMAGEKIT_URL_ENDPOINT || "",
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY || ""
 } as const
