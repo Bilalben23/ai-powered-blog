@@ -1,4 +1,4 @@
-import type { BlogCategory } from '@constants/blogData'
+import type { BlogCategory } from '@constants/categories'
 import { type FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 

@@ -1,4 +1,4 @@
-import { blogCategories } from '@constants/blogData';
+import { blogCategories } from '@constants/categories';
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@utils/axiosInstance';
 import { z } from 'zod';

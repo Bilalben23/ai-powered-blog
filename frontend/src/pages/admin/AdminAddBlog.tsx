@@ -1,5 +1,5 @@
 import { assets } from '@constants/assets';
-import { blogCategories } from '@constants/blogData';
+import { blogCategories } from '@constants/categories';
 import { useEffect, useRef } from 'react';
 import { motion } from "motion/react";
 import { Pencil } from 'lucide-react';
@@ -59,6 +59,11 @@ export default function AdminAddBlog() {
 
 
     const generateContentWithAI = () => {
+        if (!getValues("title")) {
+            toast.error("Title is required to generate the description");
+            return;
+        }
+
         generateDescription(getValues("title"), {
             onSuccess: async (data) => {
                 if (quillRef.current?.root && data.description) {
@@ -172,14 +177,14 @@ export default function AdminAddBlog() {
 
                         <button
                             type="button"
-                            disabled={isGenerateDescriptionPending || !watch("title")}
+                            disabled={isGenerateDescriptionPending}
                             className='absolute flex items-center px-4 py-2 text-xs text-white transition rounded shadow cursor-pointer bg-black/75 hover:opacity-95 bottom-1 right-2 gap-x-2 disabled:opacity-50'
                             onClick={generateContentWithAI}
                         >
                             {
                                 isGenerateDescriptionPending ?
                                     <ClipLoader size={15} />
-                                    : <Pencil size={15} />
+                                    : <img src={assets.star_icon} className='w-3' />
                             }
                             {isGenerateDescriptionPending ? "Generating description..." : "Generate with AI"}
                         </button>

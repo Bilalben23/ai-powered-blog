@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import useAxios from './useAxios';
-import { blogCategories } from '@constants/blogData';
+import { blogCategories } from '@constants/categories';
 
 
 const deleteBlogResponseSchema = z.object({

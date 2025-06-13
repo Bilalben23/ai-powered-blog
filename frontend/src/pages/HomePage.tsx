@@ -1,7 +1,7 @@
-import Hero from '@components/home/Hero'
-import BlogList from '@components/home/BlogList'
-import Newsletter from '@components/home/Newsletter'
-import { useEffect } from 'react'
+import Hero from '@components/home/Hero';
+import BlogList from '@components/home/BlogList';
+import Newsletter from '@components/home/Newsletter';
+import { useEffect } from 'react';
 
 export default function HomePage() {
 

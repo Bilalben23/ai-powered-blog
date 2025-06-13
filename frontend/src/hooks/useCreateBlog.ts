@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxios from "./useAxios";
 import type { BlogFormInputs } from "@validations/blogSchema";
 import { z } from "zod";
-import { blogCategories } from "@constants/blogData";
+import { blogCategories } from "@constants/categories";
 
 
 const CreateBlogResponse = z.object({

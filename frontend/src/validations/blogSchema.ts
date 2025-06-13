@@ -1,4 +1,4 @@
-import { blogCategories } from "@constants/blogData";
+import { blogCategories } from "@constants/categories";
 import { z } from "zod";
 
 export const blogSchema = z.object({
