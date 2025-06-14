@@ -32,10 +32,11 @@ export default function useDeleteBlog() {
             return parsed.data;
         },
         onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["authorBlogs"], exact: false });
             queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
             queryClient.invalidateQueries({ queryKey: ["blogs", "all"], exact: false });
             queryClient.invalidateQueries({ queryKey: ["blogs", data.data.category], exact: false });
-            queryClient.removeQueries({ queryKey: ["blog", data.data._id] })
+            queryClient.removeQueries({ queryKey: ["blog", data.data._id] });
         }
     })
 

@@ -53,17 +53,18 @@ const BlogTable: FC<BlogTableProps> = ({ blogs = [], isLoading, isError, error, 
                                         isPublished={blog.isPublished}
                                         createdAt={blog.createdAt}
                                     />)
-                                    : <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
-                                        No blogs found.{' '}
-                                        <Link
-                                            to="/admin/blogs/new"
-                                            className="text-blue-600 hover:underline font-medium"
-                                        >
-                                            Create your first blog post
-                                        </Link>
-                                        .
-                                    </td>
-
+                                    : <tr>
+                                        <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
+                                            No blogs found.{' '}
+                                            <Link
+                                                to="/admin/blogs/new"
+                                                className="text-blue-600 hover:underline font-medium"
+                                            >
+                                                Create your first blog post
+                                            </Link>
+                                            .
+                                        </td>
+                                    </tr>
 
                             : <tr>
                                 <td colSpan={5} className="px-4 py-6 text-center text-red-600">

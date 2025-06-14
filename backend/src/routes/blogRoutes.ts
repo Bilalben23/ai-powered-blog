@@ -81,6 +81,7 @@ router.post(
 router.post(
     "/generate-description",
     authenticateJWT,
+    validate({ body: generateDescriptionSchema }),
     BlogController.generateDescription
 )
 
@@ -93,7 +94,6 @@ router.post(
 router.patch(
     "/:id/publish",
     authenticateJWT,
-    validate({ body: generateDescriptionSchema }),
     BlogController.togglePublish
 );
 

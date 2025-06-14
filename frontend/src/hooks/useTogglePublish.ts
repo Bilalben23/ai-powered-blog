@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxios from "./useAxios";
 import { z } from "zod";
-import toast from "react-hot-toast";
 
 
 const TogglePublishResponse = z.object({
@@ -14,7 +13,7 @@ const TogglePublishResponse = z.object({
     })
 })
 
-export default function useTogglePublish() {
+export default function useTogglePublish({ page = 1 }: { page?: number }) {
     const queryClient = useQueryClient();
     const axios = useAxios();
 
@@ -34,6 +33,8 @@ export default function useTogglePublish() {
             queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
             queryClient.invalidateQueries({ queryKey: ["blogs", "all"], exact: false });
             queryClient.invalidateQueries({ queryKey: ["blogs", data.data.category], exact: false });
+            queryClient.invalidateQueries({ queryKey: ["authorBlogs", page] });
+
             if (!data.data.isPublished) {
                 queryClient.removeQueries({ queryKey: ["blog", data.data._id] });
             }

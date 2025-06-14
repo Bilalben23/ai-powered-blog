@@ -4,6 +4,7 @@ import { formatDateReadable } from '@utils/formatDate';
 import { X } from 'lucide-react';
 import type { FC } from 'react';
 import toast from 'react-hot-toast';
+import { useSearchParams } from 'react-router-dom';
 
 
 interface BlogRowProps {
@@ -15,8 +16,11 @@ interface BlogRowProps {
 }
 
 const BlogRow: FC<BlogRowProps> = ({ index, blogId, title, createdAt, isPublished }) => {
+    const [searchParams] = useSearchParams();
+    const page = Number(searchParams.get("page"));
+
     const { mutate: deleteBlog, isPending: isDeletePending } = useDeleteBlog();
-    const { mutate: toggleBlog, isPending: isTogglePending } = useTogglePublish();
+    const { mutate: toggleBlog, isPending: isTogglePending } = useTogglePublish({ page });
 
     const handleDelete = (id: string) => {
         const confirmDelete = confirm("Are you sure you want to delete this blog post?");

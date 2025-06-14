@@ -166,11 +166,42 @@ cd frontend && npm run dev
 
 ---
 
-# Demo
+## 🚀 Demo
 
-_(Include a link or screenshot if you have a live demo or demo GIF)_
+Live demo for the app will be available soon!
 
----
+> 🌐 **Visit:** [https://quickblog.vercel.app](https://quickblog.vercel.app) _(coming soon)_
 
-# Screenshots
+- ## 🖼️ Screenshots
 
+Here are some snapshots showcasing the key pages and features of **Quick Blog**, including the public interface and the admin dashboard. These images illustrate the clean UI, blog management capabilities, and moderation tools built into the platform.
+
+### 🏠 Home Page
+
+![Home Page](./frontend/public/assets/screenshots/home_page.png)
+
+### 📝 Blog Page
+
+![Blog Page](./frontend/public/assets/screenshots/blog_page.png)
+
+### 🔐 Admin Login Page
+
+![Admin Login](./frontend/public/assets/screenshots/admin_login_page.png)
+
+### 📊 Admin Dashboard
+
+#### 📈 Dashboard Stats
+
+![Dashboard Stats](./frontend/public/assets/screenshots/dashboard_stats.png)
+
+#### ➕ Add Blog
+
+![Add Blog](./frontend/public/assets/screenshots/dashboard_add_blog.png)
+
+#### 📋 Blog List
+
+![Blog List](./frontend/public/assets/screenshots/dashboard_blog_list.png)
+
+#### 💬 Comments List
+
+![Comments List](./frontend/public/assets/screenshots/dashboard_comments.png)
