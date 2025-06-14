@@ -25,7 +25,7 @@ app.use(cors({
     credentials: true
 }))
 app.use(passport.initialize());
-
+connectDB()
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/blogs", blogsRoutes);
@@ -33,7 +33,9 @@ app.use("/api/v1/comments", commentsRoutes);
 app.use("/api/v1/newsletter", newsletterRoutes);
 
 
-app.listen(ENV_VARS.PORT, "0.0.0.0", () => {
-    console.log(`✅ App is running on http://localhost:${ENV_VARS.PORT}`);
-    connectDB();
-})
+//app.listen(ENV_VARS.PORT, "0.0.0.0", () => {
+//    console.log(`✅ App is running on http://localhost:${ENV_VARS.PORT}`);
+//    connectDB();
+//})
+
+export default app;
