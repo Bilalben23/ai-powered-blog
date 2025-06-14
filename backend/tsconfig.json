@@ -11,12 +11,13 @@
 		"moduleResolution": "Node",
 		"outDir": "dist",
 		"importsNotUsedAsValues": "remove",
-    "noImplicitAny": true,
+    	"noImplicitAny": true,
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true
+		"forceConsistentCasingInFileNames": true,
+		"allowJs": true
 	},
-	"include": ["src/**/*"],
+	"include": ["src/**/*.ts"],
 	"exclude": ["node_modules", "dist"]
 }
