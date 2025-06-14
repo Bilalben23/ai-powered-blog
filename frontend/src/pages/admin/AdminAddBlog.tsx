@@ -2,7 +2,6 @@ import { assets } from '@constants/assets';
 import { blogCategories } from '@constants/categories';
 import { useEffect, useRef } from 'react';
 import { motion } from "motion/react";
-import { Pencil } from 'lucide-react';
 import Quill from 'quill';
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';

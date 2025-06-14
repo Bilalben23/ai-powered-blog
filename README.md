@@ -30,7 +30,7 @@
 - **Database:** MongoDB with Mongoose
 - **Authentication:** Passport.js using JWT strategy
 - **Image Upload:** ImageKit
-- **AI Integration:** Google Generative AI SDK (`@google/genai`) for content description generation
+- **AI Integration:** Gemini (Google GenAI)for content description generation
 - **Validation:** Zod
 - **Security:** Helmet, CORS, cookie-parser
 

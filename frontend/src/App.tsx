@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import AppLayout from '@layouts/AppLayout';
 import HomePage from '@pages/HomePage';
 import BlogPage from '@pages/BlogPage';
@@ -14,29 +14,27 @@ import PersistLogin from '@components/PersistLogin';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <Routes>
 
-        <Route element={<PersistLogin />}>
-          <Route path='/' element={<AppLayout />}>
-            <Route index element={<HomePage />} />
-            <Route path='blog/:id' element={<BlogPage />} />
+      <Route element={<PersistLogin />}>
+        <Route path='/' element={<AppLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path='blog/:id' element={<BlogPage />} />
 
-          </Route>
-
-          <Route element={<ProtectedRoute />}>
-            <Route path='/admin' element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path='blogs/new' element={<AdminAddBlog />} />
-              <Route path='blogs' element={<AdminBlogList />} />
-              <Route path='comments' element={<AdminComments />} />
-
-            </Route>
-          </Route>
         </Route>
 
-        <Route path='/login' element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+        <Route element={<ProtectedRoute />}>
+          <Route path='/admin' element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path='blogs/new' element={<AdminAddBlog />} />
+            <Route path='blogs' element={<AdminBlogList />} />
+            <Route path='comments' element={<AdminComments />} />
+
+          </Route>
+        </Route>
+      </Route>
+
+      <Route path='/login' element={<Login />} />
+    </Routes>
   )
 }

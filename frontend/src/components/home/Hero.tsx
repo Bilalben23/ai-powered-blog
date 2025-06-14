@@ -1,19 +1,29 @@
 import { assets } from '@constants/assets';
+import { useSearchContext } from '@hooks/useSearchContext';
 import { Search } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 
 export default function Hero() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const { setSearchText } = useSearchContext();
 
-    const { register, handleSubmit } = useForm({
+    const { register, handleSubmit, getValues } = useForm({
         defaultValues: {
             searchText: ""
         }
     })
 
-    function onSubmit() {
 
+    function onSubmit() {
+        setSearchText(getValues("searchText"));
+
+        const currentParams = Object.fromEntries(searchParams.entries());
+        const newParams = {
+            ...currentParams,
+            q: getValues("searchText")
+        };
+        setSearchParams(newParams);
     }
 
 
@@ -41,7 +51,6 @@ export default function Hero() {
                             {...register("searchText")}
                             placeholder='Search for blogs'
                             className='w-full text-gray-500 px-4 py-2.5 sm:py-3 outline-none'
-                            required
                         />
                         <button type="submit" className='p-2.5 sm:px-8 sm:py-3 text-white transition-all rounded-md cursor-pointer bg-primary hover:scale-105'>
                             <span className='hidden sm:inline'>Search</span>

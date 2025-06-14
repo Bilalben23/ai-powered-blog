@@ -31,14 +31,15 @@ export type BlogCategoryFilter = "all" | BlogCategory;
 
 type UseBlogsByCategoryParams = {
     category: BlogCategoryFilter;
-    page?: number
+    page?: number;
+    q?: string
 }
 
 
-export async function fetchBlogsByCategory(category: BlogCategoryFilter, page = 1) {
+export async function fetchBlogsByCategory(category: BlogCategoryFilter, page = 1, q = "") {
 
     const { data } = await axiosInstance.get(`/v1/blogs/category/${category}`, {
-        params: { page }
+        params: { page, q }
     });
 
     const parsed = blogsResponseSchema.safeParse(data);
@@ -53,10 +54,10 @@ export async function fetchBlogsByCategory(category: BlogCategoryFilter, page = 
 }
 
 
-export default function useBlogsByCategory({ category, page = 1 }: UseBlogsByCategoryParams) {
+export default function useBlogsByCategory({ category, page = 1, q }: UseBlogsByCategoryParams) {
     return useQuery({
-        queryKey: ["blogs", category, page],
-        queryFn: () => fetchBlogsByCategory(category, page),
+        queryKey: ["blogs", category, page, q],
+        queryFn: () => fetchBlogsByCategory(category, page, q),
         placeholderData: keepPreviousData,
         enabled: !!category
     })

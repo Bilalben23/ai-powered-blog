@@ -3,7 +3,6 @@ import type { Blog } from "@hooks/useDashboardStats";
 import BlogRow from "./BlogRow";
 import BlogTableSkeleton from "@components/skeletons/BlogTableSkeleton";
 import ErrorMessage from "@components/ErrorMessage";
-import { tr } from "zod/v4/locales";
 import { Link } from "react-router-dom";
 
 

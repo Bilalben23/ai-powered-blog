@@ -89,17 +89,25 @@ export const getDashboardStats = async (req: Request, res: Response) => {
 }
 
 
-export const getBlogsByCategory = async (req: Request<{ category: ExtendedCategory }, {}, {}, { limit?: number, page?: number }>, res: Response) => {
+export const getBlogsByCategory = async (req: Request<{ category: ExtendedCategory }, {}, {}, { limit?: number, page?: number, q?: string }>, res: Response) => {
     try {
         const { category } = req.params;
         const limit = Number(req.query.limit) || 10;
         const page = Number(req.query.page) || 1;
         const skip = (page - 1) * limit;
+        const query = req.query.q?.trim();
 
         const filter: Record<string, any> = { isPublished: true };
 
         if (category !== "all") {
             filter.category = category;
+        }
+
+        if (query) {
+            filter.$or = [
+                { title: { $regex: query, $options: "i" } },
+                { subTitle: { $regex: query, $options: "i" } }
+            ];
         }
 
         const totalBlogs = await Blog.countDocuments(filter);

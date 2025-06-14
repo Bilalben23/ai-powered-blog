@@ -7,11 +7,13 @@ import useBlogsByCategory, { type BlogCategoryFilter, fetchBlogsByCategory } fro
 import { useQueryClient } from '@tanstack/react-query';
 import { Ban } from 'lucide-react';
 import BlogCardSkeleton from '@components/skeletons/BlogCardSkeleton';
+import { useSearchContext } from '@hooks/useSearchContext';
 
 
 export default function BlogList() {
     const [searchParams, setSearchParams] = useSearchParams();
     const queryClient = useQueryClient();
+    const { searchText } = useSearchContext();
 
     const initialCategory = (searchParams.get("category") as BlogCategoryFilter) || "all";
     const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
@@ -19,23 +21,30 @@ export default function BlogList() {
     const [category, setCategory] = useState<BlogCategoryFilter>(initialCategory);
     const [page, setPage] = useState<number>(initialPage);
 
-    const { data, isLoading, isError, error, isPlaceholderData, } = useBlogsByCategory({ category, page });
+    const { data, isLoading, isError, error, isPlaceholderData, } = useBlogsByCategory({ category, page, q: searchText });
     const blogs = data?.blogs;
     const pagination = data?.pagination;
 
+
     useEffect(() => {
-        setSearchParams({ category, page: String(page) })
+        const currentParams = Object.fromEntries(searchParams.entries());
+        const newParams = {
+            ...currentParams,
+            category,
+            page: String(page)
+        };
+        setSearchParams(newParams);
     }, [category, page]);
 
 
     useEffect(() => {
         if (!isPlaceholderData && pagination && pagination.hasNextPage) {
             queryClient.prefetchQuery({
-                queryKey: ["blogs", category, page + 1],
-                queryFn: () => fetchBlogsByCategory(category, page + 1)
+                queryKey: ["blogs", category, page + 1, searchText],
+                queryFn: () => fetchBlogsByCategory(category, page + 1, searchText)
             })
         }
-    }, [queryClient, pagination?.hasNextPage, isPlaceholderData, category, page])
+    }, [queryClient, pagination?.hasNextPage, isPlaceholderData, category, page, searchText])
 
     useEffect(() => {
         window.scrollTo({ top: 580, behavior: 'smooth' });

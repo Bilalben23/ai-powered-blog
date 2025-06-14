@@ -7,6 +7,8 @@ import 'quill/dist/quill.snow.css';
 import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 //import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { SearchProvider } from '@context/SearchContext.tsx';
+import { BrowserRouter } from 'react-router-dom';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,12 +21,16 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <App />
-        {/* <ReactQueryDevtools /> */}
-        <Toaster />
-      </QueryClientProvider>
-    </AuthProvider>
-  </StrictMode >
+    <BrowserRouter>
+      <AuthProvider>
+        <SearchProvider>
+          <QueryClientProvider client={queryClient}>
+            <App />
+            {/* <ReactQueryDevtools /> */}
+            <Toaster />
+          </QueryClientProvider>
+        </SearchProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </StrictMode>
 )
