@@ -2,7 +2,7 @@ import { CheckCircle, XCircle } from "lucide-react";
 import { useEffect, useState } from 'react';
 import CommentRow from '@components/admin/CommentRow';
 import useAdminComments, { fetchAdminComments } from '@hooks/useAdminComments';
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import useAxios from "@hooks/useAxios";
 import CommentTableSkeleton from "@components/skeletons/CommentTableSkeleton";
@@ -99,12 +99,25 @@ export default function AdminComments() {
                             !isError ?
                                 isLoading ?
                                     <CommentTableSkeleton />
-                                    : comments?.map(comment => (
-                                        <CommentRow
-                                            key={comment._id}
-                                            comment={comment}
-                                        />
-                                    ))
+                                    : comments?.length !== 0
+                                        ? comments?.map(comment => (
+                                            <CommentRow
+                                                key={comment._id}
+                                                comment={comment}
+                                            />
+                                        ))
+                                        : <tr>
+                                            <td colSpan={3} className="px-4 py-6 text-center text-gray-500">
+                                                No comments available yet.{' '}
+                                                <Link
+                                                    to="/"
+                                                    className="text-blue-600 hover:underline font-medium"
+                                                >
+                                                    Visit the blog page to interact
+                                                </Link>
+                                                .
+                                            </td>
+                                        </tr>
                                 : <tr>
                                     <td colSpan={3} className="px-4 py-6 text-center text-red-600">
                                         <ErrorMessage

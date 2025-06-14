@@ -3,6 +3,8 @@ import type { Blog } from "@hooks/useDashboardStats";
 import BlogRow from "./BlogRow";
 import BlogTableSkeleton from "@components/skeletons/BlogTableSkeleton";
 import ErrorMessage from "@components/ErrorMessage";
+import { tr } from "zod/v4/locales";
+import { Link } from "react-router-dom";
 
 
 type BlogTableProps = {
@@ -42,15 +44,27 @@ const BlogTable: FC<BlogTableProps> = ({ blogs = [], isLoading, isError, error, 
                         !isError ?
                             isLoading
                                 ? <BlogTableSkeleton rowsNumber={skeletonRowsNumber} />
-                                : blogs.map((blog, index) => <BlogRow
-                                    key={blog._id}
-                                    index={index + 1}
-                                    blogId={blog._id}
-                                    title={blog.title}
-                                    isPublished={blog.isPublished}
-                                    createdAt={blog.createdAt}
-                                />
-                                )
+                                : blogs.length !== 0 ?
+                                    blogs.map((blog, index) => <BlogRow
+                                        key={blog._id}
+                                        index={index + 1}
+                                        blogId={blog._id}
+                                        title={blog.title}
+                                        isPublished={blog.isPublished}
+                                        createdAt={blog.createdAt}
+                                    />)
+                                    : <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
+                                        No blogs found.{' '}
+                                        <Link
+                                            to="/admin/blogs/new"
+                                            className="text-blue-600 hover:underline font-medium"
+                                        >
+                                            Create your first blog post
+                                        </Link>
+                                        .
+                                    </td>
+
+
                             : <tr>
                                 <td colSpan={5} className="px-4 py-6 text-center text-red-600">
                                     <ErrorMessage
