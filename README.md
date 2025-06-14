@@ -170,7 +170,9 @@ cd frontend && npm run dev
 
 Live demo for the app will be available soon!
 
-> 🌐 **Visit:** [https://quickblog.vercel.app](https://quickblog.vercel.app) _(coming soon)_
+> 🌐 **Visit:** [https://quickblog.vercel.app](https://quickblog.vercel.app)
+
+---
 
 - ## 🖼️ Screenshots
 
