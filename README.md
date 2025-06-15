@@ -207,3 +207,7 @@ Here are some snapshots showcasing the key pages and features of **Quick Blog**,
 #### 💬 Comments List
 
 ![Comments List](./frontend/public/assets/screenshots/dashboard_comments.png)
+
+### 🚫 Not Found
+
+![Not Found](./frontend/public/assets/screenshots/not_found_page.png)

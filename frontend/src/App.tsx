@@ -10,6 +10,7 @@ import AdminBlogList from '@pages/admin/AdminBlogList';
 import AdminComments from '@pages/admin/AdminComments';
 import ProtectedRoute from '@components/ProtectedRoute';
 import PersistLogin from '@components/PersistLogin';
+import NotFoundPage from '@pages/NotFoundPage';
 
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
       </Route>
 
       <Route path='/login' element={<Login />} />
+      <Route path='*' element={<NotFoundPage />} />
     </Routes>
   )
 }
